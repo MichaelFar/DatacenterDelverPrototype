@@ -30,13 +30,13 @@ extends CharacterBody3D
 
 @export_group("Input Actions")
 ## Name of Input Action to move Left.
-@export var input_left : String = "ui_left"
+@export var input_left : String = "Left"
 ## Name of Input Action to move Right.
-@export var input_right : String = "ui_right"
+@export var input_right : String = "Right"
 ## Name of Input Action to move Forward.
-@export var input_forward : String = "ui_up"
+@export var input_forward : String = "Forward"
 ## Name of Input Action to move Backward.
-@export var input_back : String = "ui_down"
+@export var input_back : String = "Back"
 ## Name of Input Action to Jump.
 @export var input_jump : String = "ui_accept"
 ## Name of Input Action to Sprint.
@@ -80,6 +80,7 @@ func _physics_process(delta: float) -> void:
 	# If freeflying, handle freefly and nothing else
 	if can_freefly and freeflying:
 		var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
+		
 		var motion := (head.global_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		motion *= freefly_speed * delta
 		move_and_collide(motion)

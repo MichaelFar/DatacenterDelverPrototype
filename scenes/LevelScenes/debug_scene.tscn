@@ -1,3 +1,45 @@
 [gd_scene format=3 uid="uid://dgv6jvtyishja"]
 
+[ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_t522a"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kv4ol"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_t522a"]
+sky_material = SubResource("ProceduralSkyMaterial_kv4ol")
+
+[sub_resource type="Environment" id="Environment_vma0u"]
+background_mode = 2
+sky = SubResource("Sky_t522a")
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wd65j"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kv4ol"]
+albedo_color = Color(0.39232534, 0.39232537, 0.39232534, 1)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_wd65j"]
+
 [node name="DebugScene" type="Node3D" unique_id=390269057]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1191665713]
+environment = SubResource("Environment_vma0u")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1260567417]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1915202862]
+transform = Transform3D(28.515469, 0, 0, 0, 0.99999964, 0, 0, 0, 29.948793, 0, 0, 0)
+mesh = SubResource("PlaneMesh_wd65j")
+surface_material_override/0 = SubResource("StandardMaterial3D_kv4ol")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=1606280589]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=628742068]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_wd65j")
+
+[node name="ProtoController" parent="." unique_id=2104272099 instance=ExtResource("1_t522a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4088917, 0, -10.519472)
