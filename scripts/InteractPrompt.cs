@@ -1,9 +1,10 @@
 using Godot;
 using System;
 
-public partial class TestInteractionArea : Area3D, IInteractable
+public partial class InteractPrompt : RichTextLabel
 {
 	// Called when the node enters the scene tree for the first time.
+	[Export]public string defaultInteractionText = "Interact";
 	public override void _Ready()
 	{
 	}
@@ -13,14 +14,8 @@ public partial class TestInteractionArea : Area3D, IInteractable
 	{
 	}
 
-    public void OnInteract()
-    {
-        GD.Print("Interacted with object");
-    }
-
-    public bool CanInteract()
-    {
-        return true;
-    }
-
+	public void SetPromptText(string new_text)
+	{
+		Text = "E" + "\n" + new_text; 
+	}
 }

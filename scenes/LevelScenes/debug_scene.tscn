@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dgv6jvtyishja"]
 
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_t522a"]
-[ext_resource type="Script" uid="uid://dcmab2jajog3m" path="res://scenes/LevelScenes/TestInteractionArea.cs" id="1_vma0u"]
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="1_vma0u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kv4ol"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -15,8 +15,6 @@ background_mode = 2
 sky = SubResource("Sky_t522a")
 glow_enabled = true
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
-
 [sub_resource type="SphereMesh" id="SphereMesh_al6tu"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wd65j"]
@@ -25,6 +23,11 @@ glow_enabled = true
 albedo_color = Color(0.39232534, 0.39232537, 0.39232534, 1)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_wd65j"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
+size = Vector3(0.17434692, 0.18457031, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
 
 [node name="DebugScene" type="Node3D" unique_id=390269057]
 
@@ -35,14 +38,17 @@ environment = SubResource("Environment_vma0u")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Area3D" type="Area3D" parent="." unique_id=586351370]
+[node name="InteractArea" parent="." unique_id=1263587914 instance=ExtResource("1_vma0u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4324118, -4.2029552)
-script = ExtResource("1_vma0u")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1897490224]
-shape = SubResource("SphereShape3D_al6tu")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="InteractArea" unique_id=568517200]
+mesh = SubResource("SphereMesh_al6tu")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D" unique_id=568517200]
+[node name="InteractArea2" parent="." unique_id=1169823076 instance=ExtResource("1_vma0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2839496, 0.4324118, -4.2029552)
+interactText = "Other Interact Text"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="InteractArea2" unique_id=1342330833]
 mesh = SubResource("SphereMesh_al6tu")
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1915202862]
@@ -56,4 +62,25 @@ surface_material_override/0 = SubResource("StandardMaterial3D_kv4ol")
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_wd65j")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1399494737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.497, 1.305, -0.969)
+mesh = SubResource("BoxMesh_al6tu")
+
 [node name="ProtoController" parent="." unique_id=2104272099 instance=ExtResource("1_t522a")]
+
+[node name="TestInteractableRigidBody" type="RigidBody3D" parent="." unique_id=1195948092]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6363616, 0.93236303, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestInteractableRigidBody" unique_id=2053393334]
+mesh = SubResource("SphereMesh_al6tu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestInteractableRigidBody" unique_id=149004529]
+shape = SubResource("SphereShape3D_al6tu")
+
+[node name="InteractArea" parent="TestInteractableRigidBody" unique_id=1081027825 instance=ExtResource("1_vma0u")]
+interactText = "Rigid body"
+
+[connection signal="ev_OnInteract" from="InteractArea" to="InteractArea" method="SetCanInteractToFalse"]
+
+[editable path="ProtoController"]
+[editable path="TestInteractableRigidBody/InteractArea"]

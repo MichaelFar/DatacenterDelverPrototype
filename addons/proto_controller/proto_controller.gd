@@ -5,6 +5,8 @@
 
 extends CharacterBody3D
 
+class_name ProtoController
+
 ## Can we move around?
 @export var can_move : bool = true
 ## Are we affected by gravity?
@@ -28,6 +30,9 @@ extends CharacterBody3D
 ## How fast do we freefly?
 @export var freefly_speed : float = 25.0
 
+@export var head: Node3D
+@export var collider: CollisionShape3D
+
 @export_group("Input Actions")
 ## Name of Input Action to move Left.
 @export var input_left : String = "Left"
@@ -50,8 +55,7 @@ var move_speed : float = 0.0
 var freeflying : bool = false
 
 ## IMPORTANT REFERENCES
-@onready var head: Node3D = $Head
-@onready var collider: CollisionShape3D = $Collider
+
 
 func _ready() -> void:
 	check_input_mappings()

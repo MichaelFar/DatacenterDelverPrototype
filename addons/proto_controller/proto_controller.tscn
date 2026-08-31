@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cj1jd527w4ofo" path="res://addons/proto_controller/proto_controller.gd" id="1_ucva2"]
 [ext_resource type="Script" uid="uid://5fwcbgii6b8r" path="res://addons/proto_controller/InteractionHandler.cs" id="2_wr06p"]
+[ext_resource type="Script" uid="uid://je8vu0uby6xg" path="res://scripts/InteractPrompt.cs" id="3_5hfox"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
 albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
@@ -16,8 +17,12 @@ height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3uhrl"]
 
-[node name="ProtoController" type="CharacterBody3D" unique_id=1412936445]
+[sub_resource type="SphereMesh" id="SphereMesh_5hfox"]
+
+[node name="ProtoController" type="CharacterBody3D" unique_id=1412936445 node_paths=PackedStringArray("head", "collider")]
 script = ExtResource("1_ucva2")
+head = NodePath("Head")
+collider = NodePath("Collider")
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=677470925]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -40,6 +45,26 @@ shape = SubResource("CapsuleShape3D_3uhrl")
 target_position = Vector3(0, 0, 0)
 collide_with_areas = true
 
-[node name="InteractionHandler" type="Node3D" parent="." unique_id=391186281 node_paths=PackedStringArray("interactionShape")]
+[node name="HandPoint" type="MeshInstance3D" parent="Head/Camera3D" unique_id=898601821]
+transform = Transform3D(0.33143032, 0, 0, 0, 0.33143032, 0, 0, 0, 0.33143032, 0.497, -0.3950001, -0.44861495)
+visible = false
+mesh = SubResource("SphereMesh_5hfox")
+
+[node name="InteractionHandler" type="Node3D" parent="." unique_id=391186281 node_paths=PackedStringArray("interactionShape", "interactHudElement")]
 script = ExtResource("2_wr06p")
 interactionShape = NodePath("../Head/Camera3D/ShapeCast3D")
+interactHudElement = NodePath("../InteractPrompt")
+
+[node name="InteractPrompt" type="RichTextLabel" parent="." unique_id=2038651891]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 32
+text = "E
+Interact"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_5hfox")
