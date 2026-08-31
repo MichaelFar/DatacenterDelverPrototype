@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dgv6jvtyishja"]
 
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_t522a"]
+[ext_resource type="Script" uid="uid://dcmab2jajog3m" path="res://scenes/LevelScenes/TestInteractionArea.cs" id="1_vma0u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kv4ol"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -13,6 +14,10 @@ sky_material = SubResource("ProceduralSkyMaterial_kv4ol")
 background_mode = 2
 sky = SubResource("Sky_t522a")
 glow_enabled = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_al6tu"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wd65j"]
 
@@ -30,6 +35,16 @@ environment = SubResource("Environment_vma0u")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
+[node name="Area3D" type="Area3D" parent="." unique_id=586351370]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4324118, -4.2029552)
+script = ExtResource("1_vma0u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1897490224]
+shape = SubResource("SphereShape3D_al6tu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D" unique_id=568517200]
+mesh = SubResource("SphereMesh_al6tu")
+
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1915202862]
 transform = Transform3D(28.515469, 0, 0, 0, 0.99999964, 0, 0, 0, 29.948793, 0, 0, 0)
 mesh = SubResource("PlaneMesh_wd65j")
@@ -42,4 +57,3 @@ transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_wd65j")
 
 [node name="ProtoController" parent="." unique_id=2104272099 instance=ExtResource("1_t522a")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4088917, 0, -10.519472)
