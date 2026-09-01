@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_t522a"]
 [ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="1_vma0u"]
+[ext_resource type="PackedScene" uid="uid://cchablf0kaowd" path="res://scenes/item_pickup.tscn" id="2_clqtk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kv4ol"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -24,9 +25,6 @@ albedo_color = Color(0.39232534, 0.39232537, 0.39232534, 1)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_wd65j"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
-size = Vector3(0.17434692, 0.18457031, 1)
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
 
 [node name="DebugScene" type="Node3D" unique_id=390269057]
@@ -44,12 +42,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4324118, -4.2029552)
 [node name="MeshInstance3D" type="MeshInstance3D" parent="InteractArea" unique_id=568517200]
 mesh = SubResource("SphereMesh_al6tu")
 
-[node name="InteractArea2" parent="." unique_id=1169823076 instance=ExtResource("1_vma0u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2839496, 0.4324118, -4.2029552)
-interactText = "Other Interact Text"
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="InteractArea2" unique_id=1342330833]
-mesh = SubResource("SphereMesh_al6tu")
+[node name="ItemPickup" parent="." unique_id=1684707487 instance=ExtResource("2_clqtk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.119213, 0.81236815, 0)
+collision_layer = 0
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1915202862]
 transform = Transform3D(28.515469, 0, 0, 0, 0.99999964, 0, 0, 0, 29.948793, 0, 0, 0)
@@ -61,10 +56,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_kv4ol")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=628742068]
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_wd65j")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1399494737]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.497, 1.305, -0.969)
-mesh = SubResource("BoxMesh_al6tu")
 
 [node name="ProtoController" parent="." unique_id=2104272099 instance=ExtResource("1_t522a")]
 
@@ -82,5 +73,4 @@ interactText = "Rigid body"
 
 [connection signal="ev_OnInteract" from="InteractArea" to="InteractArea" method="SetCanInteractToFalse"]
 
-[editable path="ProtoController"]
 [editable path="TestInteractableRigidBody/InteractArea"]

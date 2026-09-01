@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://ygmi4u1abxok"]
+
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="2_vk80k"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_al6tu"]
+
+[node name="TestItemPickup" type="MeshInstance3D" unique_id=2020622747]
+mesh = SubResource("SphereMesh_al6tu")
+
+[node name="InteractArea2" parent="." unique_id=1263587914 instance=ExtResource("2_vk80k")]
+interactText = "Pickup Item"

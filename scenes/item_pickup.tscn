@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cchablf0kaowd"]
+
+[ext_resource type="Script" uid="uid://d2hjcousisg1r" path="res://scripts/ItemPickup.cs" id="1_72sof"]
+[ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="2_x8ccl"]
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_l2q6m"]
+
+[sub_resource type="Resource" id="Resource_3uhrl"]
+script = ExtResource("2_x8ccl")
+yWeaponSway = 0.1
+xWeaponSway = 0.2
+yWeaponSwayPosition = 0.2
+xWeaponSwayPosition = 0.3
+yWeaponRotation = 17.9
+xWeaponRotation = 19.2
+yWeaponRotationPosition = 0.2
+xWeaponRotationPosition = 0.2
+metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
+
+[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
+size = Vector3(0.17434692, 0.18457031, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
+radius = 0.21875
+height = 1.1391602
+
+[node name="ItemPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea")]
+script = ExtResource("1_72sof")
+itemAnimationData = SubResource("Resource_3uhrl")
+myArea = NodePath("TestItemPickup/InteractArea2")
+
+[node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
+
+[node name="InteractArea2" parent="TestItemPickup" unique_id=1263587914 instance=ExtResource("3_l2q6m")]
+interactText = "Pickup Item"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestItemPickup" unique_id=1702630979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.47469497)
+mesh = SubResource("BoxMesh_al6tu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=882061266]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
+shape = SubResource("CapsuleShape3D_al6tu")
+
+[connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]

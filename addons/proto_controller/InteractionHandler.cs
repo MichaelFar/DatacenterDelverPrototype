@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 
 public partial class InteractionHandler : Node3D
@@ -10,6 +11,8 @@ public partial class InteractionHandler : Node3D
 	[Export]ShapeCast3D interactionShape;
 	[Export]InteractPrompt interactHudElement;
 	
+	[Signal]public delegate void ev_ThisColliderInteractedWithEventHandler(Node3D delivered_collider);
+
 	public override void _Ready()
 	{
 		
@@ -60,6 +63,7 @@ public partial class InteractionHandler : Node3D
 			{
 				if(interactable.CanInteract(this))
 				{
+					EmitSignal(SignalName.ev_ThisColliderInteractedWith, (interactionShape.GetCollider(i) as Node).Owner);
 					interactable.OnInteract(this);
 				}
 			}
