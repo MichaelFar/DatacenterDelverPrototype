@@ -91,6 +91,11 @@ public sealed partial class ProtoController : CharacterBody3D
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
+        if(mouseMotionRelative == mouseMotionRelativePreviousFrame)
+        {
+            mouseMotionRelative = Vector2.Zero;
+        }
+        RotateLook(mouseMotionRelative);
         if(GlobalValues.Instance != null && firstFrame)
         {
             firstFrame = false;
@@ -165,12 +170,13 @@ public sealed partial class ProtoController : CharacterBody3D
         }
 
         MoveAndSlide();
-
+        mouseMotionRelativePreviousFrame = mouseMotionRelative;
         return;
 
         Vector2 GetInputVector() => Input.GetVector(_inputLeft, _inputRight, _inputForward, _inputBack);
     }
-
+    private Vector2 mouseMotionRelative;
+    private Vector2 mouseMotionRelativePreviousFrame;
     public override void _UnhandledInput(InputEvent @event)
     {
         base._UnhandledInput(@event);
@@ -187,7 +193,8 @@ public sealed partial class ProtoController : CharacterBody3D
 
         if (_mouseCaptured && @event is InputEventMouseMotion motionEvent)
         {
-            RotateLook(motionEvent.Relative);
+            mouseMotionRelative = motionEvent.Relative;
+            
         }
 
         if (_canFreeFly && Input.IsActionJustPressed(_inputFreeFly))
