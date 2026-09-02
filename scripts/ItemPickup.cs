@@ -8,6 +8,7 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 	[Export] private ItemAnimationData itemAnimationData;
 	[Export] private InteractionArea myArea;
 	
+	[Export] private PathFollow3D swayPath;
     [Signal]public delegate void ev_UsedPrimaryEventHandler();
 	[Signal]public delegate void ev_UsedAlternateEventHandler();
 
@@ -26,12 +27,27 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 
 	[Export] float timeToBob = 0.4f;
 	private float moveTimer = 0.0f;
+
+	private float defaultPathFollowProgress;
+	private bool swayPathAvailable = false;
 	public override void _Ready()
 	{
+		if(swayPath != null)
+		{
+			swayPathAvailable = true;
+			defaultPathFollowProgress = swayPath.Progress;
+		}
 		
 		
 		//InitializeGlobalValues();
 	}
+	
+	public void InitializeGlobalValues()
+    {
+        
+        //GlobalValues.Instance.playerObject.ev_Moving += bob_up_and_down;
+		playerObject = GlobalValues.Instance.playerObject;
+    }
 	public void BecomeHeld()
 	{
 		
@@ -44,15 +60,8 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 	{
 		moveTimer = 0.0f;
 	}
-	public void InitializeGlobalValues()
-    {
-        
-        //GlobalValues.Instance.playerObject.ev_Moving += bob_up_and_down;
-		playerObject = GlobalValues.Instance.playerObject;
-    }
-
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		if(GlobalValues.Instance.playerInitialized && firstFrame)
         {
@@ -63,7 +72,12 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 		{
 			moveTimer += (float)delta;
 			float move_ratio = moveTimer / timeToBob;
-			Position = new Vector3(Position.X, (float)(Position.Y + (0.01 * bobDirection)), Position.Z).Lerp(Position, move_ratio);
+			Position = new Vector3(Position.X, (Position.Y + (0.01f * bobDirection)), Position.Z).Lerp(Position, move_ratio);
+			if(swayPathAvailable)
+			{
+				swayPath.Progress = Mathf.Lerp(swayPath.Progress, swayPath.Progress + (bobDirection * 0.002f), move_ratio);
+			}
+				
 			if(moveTimer >= timeToBob)
 			{
 				moveTimer = 0.0f;
@@ -75,6 +89,11 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 			moveTimer += (float)delta;
 			float move_ratio = moveTimer / timeToBob;
 			Position = new Vector3(Position.X, (float)(originalPositionY), Position.Z).Lerp(Position, move_ratio);
+			if(swayPathAvailable)
+			{
+				swayPath.Progress = Mathf.Lerp(swayPath.Progress, defaultPathFollowProgress, move_ratio);
+			}
+			bobDirection = -1;
 		}
 	}
 	public ItemAnimationData GetItemAnimationData()

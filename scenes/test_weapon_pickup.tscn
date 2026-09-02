@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_c6vs4"]
 [ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/blasterA.fbx" id="4_u6lk0"]
 [ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="5_c6vs4"]
-[ext_resource type="Script" uid="uid://scgmniu3vq31" path="res://scripts/Projectile.cs" id="6_d2e3b"]
 
 [sub_resource type="Resource" id="Resource_3uhrl"]
 script = ExtResource("2_u6lk0")
@@ -23,11 +22,19 @@ metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
 radius = 0.21875
 height = 1.1391602
 
-[node name="WeaponPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea")]
+[sub_resource type="Curve3D" id="Curve3D_c6vs4"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.10805938, 0.064083815, -0.04349017, 0, 0, 0, 0, 0, 0, -0.08748575, 0.014078289, -0.046651006, 0, 0, 0, 0, 0, 0, 0.030004755, 0.01421079, -0.05531921, 0, 0, 0, 0, 0, 0, 0.13257314, 0.08192259, -0.051409055),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[node name="WeaponPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea", "swayPath")]
 collision_layer = 0
 script = ExtResource("1_jd0is")
 itemAnimationData = SubResource("Resource_3uhrl")
 myArea = NodePath("TestItemPickup/InteractArea2")
+swayPath = NodePath("Path3D/PathFollow3D")
 
 [node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
 
@@ -38,13 +45,24 @@ interactText = "Weapon Pickup"
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
 shape = SubResource("CapsuleShape3D_al6tu")
 
-[node name="blasterA" parent="." unique_id=1107578817 instance=ExtResource("4_u6lk0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.40417075)
-
 [node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369]
 script = ExtResource("5_c6vs4")
 
-[node name="Projectile" type="RigidBody3D" parent="." unique_id=199035068]
-script = ExtResource("6_d2e3b")
+[node name="Path3D" type="Path3D" parent="." unique_id=812425801]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+curve = SubResource("Curve3D_c6vs4")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D" unique_id=289844958]
+transform = Transform3D(-0.074219026, 0, 0.9972105, 0, 0.9999844, 0, -0.99718845, 0, -0.074220665, 0.028143004, 0.013654119, -0.055275064)
+progress = 0.17
+rotation_mode = 1
+use_model_front = true
+loop = false
+
+[node name="blasterRotationParent" parent="Path3D/PathFollow3D" unique_id=1107578817 instance=ExtResource("4_u6lk0")]
+transform = Transform3D(0.070227064, 0.055096876, 0.9960081, 0.00014681053, 0.998473, -0.055243567, -0.9975313, 0.004025816, 0.070111714, -0.36307117, -0.0789016, 0.0010003708)
+
+[node name="blasterA2" parent="Path3D/PathFollow3D/blasterRotationParent" unique_id=475662952 instance=ExtResource("4_u6lk0")]
+transform = Transform3D(1, -1.3853186e-13, 2.842171e-14, -1.28543425e-14, 1, 0, 2.842171e-14, 7.1054274e-15, 1, 0, 0, 0)
 
 [connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]
