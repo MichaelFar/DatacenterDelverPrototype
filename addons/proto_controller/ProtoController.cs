@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Godot;
 
 public sealed partial class ProtoController : CharacterBody3D
@@ -74,16 +75,27 @@ public sealed partial class ProtoController : CharacterBody3D
     public override void _Ready()
     {
         base._Ready();
-
+        
+        
         
         _lookRotation = new Vector2(_head.Rotation.X, Rotation.Y);
         EnsureInputMappings();
+    }
+    bool firstFrame = true;
+    void InitializeGlobalValues()
+    {
+        GD.Print("Initializing player object");
+        GlobalValues.Instance.playerObject = this;
     }
 
     public override void _PhysicsProcess(double delta)
     {
         base._PhysicsProcess(delta);
-
+        if(GlobalValues.Instance != null && firstFrame)
+        {
+            firstFrame = false;
+            InitializeGlobalValues();
+        }
         if (_canFreeFly && _freeFlying)
         {
             var inputDir = GetInputVector();
@@ -116,6 +128,7 @@ public sealed partial class ProtoController : CharacterBody3D
 				if(!isMoving)
 				{
 					EmitSignal(SignalName.ev_Moving);
+                    
 					isMoving = true;
 				}
 					
@@ -123,16 +136,17 @@ public sealed partial class ProtoController : CharacterBody3D
                 {
                     X = moveDir.X * moveSpeed,
                     Z = moveDir.Z * moveSpeed
+                    
                 };
             }
             else
             {
-				if(isMoving)
-				{
-					isMoving = false;
-					EmitSignal(SignalName.ev_Stopped);
-				}
-					
+				
+			    if(isMoving)
+                {
+                    isMoving = false;
+                    EmitSignal(SignalName.ev_Stopped);
+                }
                 Velocity = Velocity with
                 {
                     X = Mathf.MoveToward(Velocity.X, 0, moveSpeed),
@@ -142,6 +156,7 @@ public sealed partial class ProtoController : CharacterBody3D
         }
         else
         {
+            
             Velocity = Velocity with
             {
                 X = 0,

@@ -33,7 +33,7 @@ public partial class HandPoint : MeshInstance3D
 	{
 		lastFrameGlobalPosition = GlobalPosition;
 		
-		playerController.ev_Moving += bob_up_and_down;
+		//playerController.ev_Moving += bob_up_and_down;
 		
 		
 		originalPositionY = Position.Y;
@@ -44,11 +44,18 @@ public partial class HandPoint : MeshInstance3D
 		
 	public override void _PhysicsProcess(double delta)
 	{
-		sway_weapon(delta);
+		//sway_weapon(delta);
 		if(Input.IsActionJustReleased("DropItem"))
 		{
 			DropItem();
 		}
+		if(heldItem != null)
+		{
+			heldItem.ProcessInput((float)delta);
+		}
+		
+		
+		
 	}
 		
 
@@ -120,8 +127,11 @@ public partial class HandPoint : MeshInstance3D
 			return;
 		}
 		heldItem = item_to_pickup;
-		heldItem.SetFreeze(true);
 		heldItem.Reparent(this);
+		//GlobalValues.Instance.playerObject.ev_Moving += heldItem.bob_up_and_down;
+		
+		heldItem.swayReferenceObject = this;
+		heldItem.BecomeHeld();
 		heldItem.GlobalPosition = GlobalPosition;
 		
 		//heldItem.Transform = Transform;
@@ -133,47 +143,16 @@ public partial class HandPoint : MeshInstance3D
 		{
 			return;
 		}
-		
+		//GlobalValues.Instance.playerObject.ev_Moving -= heldItem.bob_up_and_down;
+		heldItem.BecomeDropped();
+		heldItem.isHeld = false;
 		heldItem.SetFreeze(false);
 		heldItem.Reparent(GetTree().Root);
 		heldItem.SetCanInteract(true);
 		heldItem = null;
 		//heldItem.GlobalPosition = GlobalPosition;
 	}
-	public void bob_up_and_down()
-	{
-		
-		if(globalTween != null)
-		{
-			if(globalTween.IsRunning())
-			{
-				globalTween.Kill();
-				ReturnToOriginalY();
-				return;
-			}
-		}
-				
-		if(!playerController.isMoving)
-		{
-			ReturnToOriginalY();
-			return;
-		}
-			
-			
-		bobDirection *= -1;
-		var tween = GetTree().CreateTween();
-		globalTween = tween;
-		tween.SetTrans(Tween.TransitionType.Quad);
-		tween.TweenProperty(this, "position:y", Position.Y + (.05 * bobDirection), 0.4);
-		tween.Finished += bob_up_and_down;
-		isBobbing = true;
-	}
-	private void ReturnToOriginalY()
-	{
-		var tween = GetTree().CreateTween();
-		tween.SetTrans(Tween.TransitionType.Quad);
-		tween.TweenProperty(this, "position:y", originalPositionY, 0.4);
-	}
+	
 	
 	
 

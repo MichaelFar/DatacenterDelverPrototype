@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bkwbmrcu3uli7"]
+
+[ext_resource type="Script" uid="uid://d2hjcousisg1r" path="res://scripts/ItemPickup.cs" id="1_jd0is"]
+[ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="2_u6lk0"]
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_c6vs4"]
+[ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/blasterA.fbx" id="4_u6lk0"]
+[ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="5_c6vs4"]
+[ext_resource type="Script" uid="uid://scgmniu3vq31" path="res://scripts/Projectile.cs" id="6_d2e3b"]
+
+[sub_resource type="Resource" id="Resource_3uhrl"]
+script = ExtResource("2_u6lk0")
+yWeaponSway = 0.1
+xWeaponSway = 0.2
+yWeaponSwayPosition = 0.2
+xWeaponSwayPosition = 0.3
+yWeaponRotation = 17.9
+xWeaponRotation = 19.2
+yWeaponRotationPosition = 0.2
+xWeaponRotationPosition = 0.2
+metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
+radius = 0.21875
+height = 1.1391602
+
+[node name="WeaponPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea")]
+collision_layer = 0
+script = ExtResource("1_jd0is")
+itemAnimationData = SubResource("Resource_3uhrl")
+myArea = NodePath("TestItemPickup/InteractArea2")
+
+[node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
+
+[node name="InteractArea2" parent="TestItemPickup" unique_id=1263587914 instance=ExtResource("3_c6vs4")]
+interactText = "Weapon Pickup"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=882061266]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
+shape = SubResource("CapsuleShape3D_al6tu")
+
+[node name="blasterA" parent="." unique_id=1107578817 instance=ExtResource("4_u6lk0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.40417075)
+
+[node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369]
+script = ExtResource("5_c6vs4")
+
+[node name="Projectile" type="RigidBody3D" parent="." unique_id=199035068]
+script = ExtResource("6_d2e3b")
+
+[connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]

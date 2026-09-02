@@ -24,6 +24,7 @@ radius = 0.21875
 height = 1.1391602
 
 [node name="ItemPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea")]
+collision_layer = 0
 script = ExtResource("1_72sof")
 itemAnimationData = SubResource("Resource_3uhrl")
 myArea = NodePath("TestItemPickup/InteractArea2")

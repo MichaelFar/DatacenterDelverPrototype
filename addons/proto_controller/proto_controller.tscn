@@ -45,7 +45,7 @@ target_position = Vector3(0, 0, 0)
 collide_with_areas = true
 
 [node name="HandPoint" type="MeshInstance3D" parent="Head/Camera3D" unique_id=898601821 node_paths=PackedStringArray("playerController")]
-transform = Transform3D(0.33143032, 0, 0, 0, 0.33143032, 0, 0, 0, 0.33143032, 0.497, -0.3950001, -0.44861495)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19942749, -0.22382617, -0.5941617)
 script = ExtResource("1_5hfox")
 playerController = NodePath("../../..")
 
