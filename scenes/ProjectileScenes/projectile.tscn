@@ -2,5 +2,34 @@
 
 [ext_resource type="Script" uid="uid://scgmniu3vq31" path="res://scripts/Projectile.cs" id="1_q1jpp"]
 
-[node name="Projectile" type="RigidBody3D" unique_id=5267562]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
+radius = 0.016
+height = 0.052
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q1jpp"]
+albedo_color = Color(0.23137255, 1, 1, 1)
+emission_enabled = true
+emission = Color(0, 0.5568628, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_al6tu"]
+material = SubResource("StandardMaterial3D_q1jpp")
+radius = 0.016
+height = 0.052
+
+[node name="Projectile" type="RigidBody3D" unique_id=5267562 node_paths=PackedStringArray("lifeTimeTimer", "projectileMesh", "collider")]
+collision_layer = 0
 script = ExtResource("1_q1jpp")
+forceMagnitude = 1.0
+lifeTimeTimer = NodePath("Timer")
+projectileMesh = NodePath("MeshInstance3D")
+collider = NodePath("CollisionShape3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1623724696]
+transform = Transform3D(21.775915, 0, 0, 0, -9.518555e-07, -21.775915, 0, 21.775915, -9.518555e-07, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_al6tu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2082028297]
+transform = Transform3D(21.775915, 0, 0, 0, -9.518555e-07, -21.775915, 0, 21.775915, -9.518555e-07, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_al6tu")
+
+[node name="Timer" type="Timer" parent="." unique_id=50298078]

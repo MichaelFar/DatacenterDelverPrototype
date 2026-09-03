@@ -1,6 +1,6 @@
 using Godot;
 using System;
-
+[GlobalClass]
 public partial class WeaponData : Resource
 {
     [Export] public int maxAmmoInMagazine = 10;

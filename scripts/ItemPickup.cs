@@ -149,59 +149,18 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 			swayReferenceObject.Position.Y + (mouseMovement.Y * item_anim_data.yWeaponSway) * delta, 
 			item_anim_data.yWeaponSwayPosition), 0);
 			Transform = held_item_transform;
-			//Position.X=Mathf.Lerp(position.x, Position.X - (mouseMovement.x * weapon.xWeaponSway) * delta, weapon.xWeaponSwayPosition);
-			//Position.X = Mathf.Lerp(position.x, Position.X - (mouseMovement.x * weapon.xWeaponSway) * delta, weapon.xWeaponSwayPosition);
-			//weapon.position.y = lerp(weapon.position.y, position.y + (mouseMovement.y * weapon.yWeaponSway) * delta, weapon.yWeaponSwayPosition);
+			
 			RotationDegrees = new Vector3((float)Mathf.Lerp(RotationDegrees.X, 
 			swayReferenceObject.RotationDegrees.X - (mouseMovement.Y * item_anim_data.xWeaponRotation) * delta, 
 			item_anim_data.xWeaponRotationPosition), 
 			(float)Mathf.Lerp(RotationDegrees.Y, 
 			swayReferenceObject.RotationDegrees.Y + (mouseMovement.X * item_anim_data.yWeaponRotation) * delta, 
 			item_anim_data.yWeaponRotationPosition), Rotation.Z);
-			//RotationDegrees.X =
-			//weapon.rotation_degrees.x = lerp(weapon.rotation_degrees.x, rotation_degrees.x - (mouseMovement.y * weapon.xWeaponRotation) * delta, weapon.xWeaponRotationPosition);
-			//weapon.rotation_degrees.y = lerp(weapon.rotation_degrees.y, rotation_degrees.y + (mouseMovement.x * weapon.yWeaponRotation) * delta, weapon.yWeaponRotationPosition);
+			
 		
 			
 	}
 
 	
-	public void bob_up_and_down()
-	{
-		
-		if(globalMovementTween != null)
-		{
-			if(globalMovementTween.IsRunning())
-			{
-				GD.Print("Killing tween");
-				globalMovementTween.Kill();
-				ReturnToOriginalY();
-				return;
-			}
-		}
-		
-			
-		if(!playerObject.isMoving)
-		{
-			GD.Print("Returning to original y position");
-			ReturnToOriginalY();
-			return;
-		}
-			
-		GD.Print("Bobbing");
-		bobDirection *= -1;
-		var tween = GetTree().CreateTween();
-		globalMovementTween = tween;
-		tween.SetTrans(Tween.TransitionType.Quad);
-		tween.TweenProperty(swayReferenceObject, "position:y", Position.Y + (.05 * bobDirection), 0.4);
-		tween.Finished += bob_up_and_down;
-			
-		
-	}
-	private void ReturnToOriginalY()
-	{
-		var tween = GetTree().CreateTween();
-		tween.SetTrans(Tween.TransitionType.Quad);
-		tween.TweenProperty(this, "position:y", originalPositionY, 0.4);
-	}
+	
 }

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 public partial class WeaponActionHandler : Node3D, IWeaponBehavior
@@ -12,16 +13,27 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 	private bool isReloading = false;
 
 	private float playerHoldDuration = 0.0f;
+	private List<Projectile> projectilePool = new List<Projectile>();
 	public override void _Ready()
 	{
-		
+		InstantiateProjectiles();
+		weaponData.currentAmmoInMagazine = weaponData.maxAmmoInMagazine;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 	}
-
+	private void InstantiateProjectiles()
+	{
+		for (int i = 0; i < weaponData.maxAmmoInMagazine; i++)
+		{
+			Projectile projectile_instance = weaponData.projectileScene.Instantiate<Projectile>();
+			GetTree().Root.CallDeferred("add_child", projectile_instance);
+			projectilePool.Add(projectile_instance);
+			projectile_instance.originPoint = firePoint;
+		}
+	}
 	public void ProcessInput(float delta)
 	{
 		if(weaponData.fireMode == WeaponData.e_FireType.Automatic)
@@ -31,17 +43,31 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 				playerHoldDuration += delta;
 				if(playerHoldDuration >= weaponData.fireCooldown)
 				{
-					
+					playerHoldDuration = 0.0f;
+					Shoot();
 				}
 			}
 			else if(Input.IsActionJustReleased("PrimaryFire"))
 			{
-				playerHoldDuration = 0.0f;
+				playerHoldDuration = Mathf.Lerp(playerHoldDuration, 0.0f, delta);
 			}
 		}
 		else
 		{
-			
+			if(Input.IsActionJustPressed("PrimaryFire") && CanShoot() && playerHoldDuration == 0.0f)
+			{
+				playerHoldDuration += delta;
+				
+				Shoot();
+				
+				SceneTreeTimer shoot_timer = GetTree().CreateTimer(weaponData.fireCooldown);
+				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;};
+			}
+		}
+		
+		if(playerHoldDuration == 0.0f && Input.IsActionJustReleased("Reload"))
+		{
+			Reload();
 		}
 
 		
@@ -58,14 +84,19 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 
     public void Shoot()
     {
-        throw new NotImplementedException();
+        GD.Print("Fired primary");
+		int projectile_index = weaponData.maxAmmoInMagazine - weaponData.currentAmmoInMagazine;
+		projectilePool[projectile_index].LaunchForward(-firePoint.Basis.Z);
+		
+		weaponData.currentAmmoInMagazine -=1;
     }
 
     public void Reload()
     {
-        throw new NotImplementedException();
+		//Need to replace this with a more robust reloading
+        weaponData.currentAmmoInMagazine = weaponData.maxAmmoInMagazine;
     }
-
+	
     
 
 }

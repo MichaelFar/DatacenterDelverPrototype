@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_c6vs4"]
 [ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/blasterA.fbx" id="4_u6lk0"]
 [ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="5_c6vs4"]
+[ext_resource type="Script" uid="uid://bqi47dvxyyyq" path="res://scripts/CustomResources/WeaponData.cs" id="5_d2e3b"]
+[ext_resource type="PackedScene" uid="uid://j2ftuynwefip" path="res://scenes/ProjectileScenes/projectile.tscn" id="5_k7vxe"]
 
 [sub_resource type="Resource" id="Resource_3uhrl"]
 script = ExtResource("2_u6lk0")
@@ -21,6 +23,13 @@ metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
 radius = 0.21875
 height = 1.1391602
+
+[sub_resource type="Resource" id="Resource_c6vs4"]
+script = ExtResource("5_d2e3b")
+projectileScene = ExtResource("5_k7vxe")
+fireMode = 0
+fireCooldown = 0.2
+metadata/_custom_type_script = "uid://bqi47dvxyyyq"
 
 [sub_resource type="Curve3D" id="Curve3D_c6vs4"]
 _data = {
@@ -45,8 +54,10 @@ interactText = "Weapon Pickup"
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
 shape = SubResource("CapsuleShape3D_al6tu")
 
-[node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369]
+[node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369 node_paths=PackedStringArray("firePoint")]
 script = ExtResource("5_c6vs4")
+weaponData = SubResource("Resource_c6vs4")
+firePoint = NodePath("../Path3D/PathFollow3D/blasterRotationParent/blasterA2/ProjectileMarker")
 
 [node name="Path3D" type="Path3D" parent="." unique_id=812425801]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
@@ -62,7 +73,17 @@ loop = false
 [node name="blasterRotationParent" parent="Path3D/PathFollow3D" unique_id=1107578817 instance=ExtResource("4_u6lk0")]
 transform = Transform3D(0.070227064, 0.055096876, 0.9960081, 0.00014681053, 0.998473, -0.055243567, -0.9975313, 0.004025816, 0.070111714, -0.36307117, -0.0789016, 0.0010003708)
 
+[node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent" index="0" unique_id=2032008314]
+visible = false
+mesh = null
+
 [node name="blasterA2" parent="Path3D/PathFollow3D/blasterRotationParent" unique_id=475662952 instance=ExtResource("4_u6lk0")]
 transform = Transform3D(1, -1.3853186e-13, 2.842171e-14, -1.28543425e-14, 1, 0, 2.842171e-14, 7.1054274e-15, 1, 0, 0, 0)
 
+[node name="ProjectileMarker" type="Marker3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=1012188796]
+transform = Transform3D(0.9999999, -5.820766e-11, -9.313226e-10, -1.4551915e-11, 1, 0, 4.656613e-10, -7.450581e-09, 1, 0.0018125176, 0.10823766, -0.45437044)
+
+[connection signal="ev_ProcessInput" from="." to="WeaponActionHandler" method="ProcessInput"]
 [connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]
+
+[editable path="Path3D/PathFollow3D/blasterRotationParent"]
