@@ -17,19 +17,18 @@ radius = 0.016
 height = 0.052
 
 [node name="Projectile" type="RigidBody3D" unique_id=5267562 node_paths=PackedStringArray("lifeTimeTimer", "projectileMesh", "collider")]
-collision_layer = 0
 script = ExtResource("1_q1jpp")
-forceMagnitude = 1.0
+forceMagnitude = 100.0
 lifeTimeTimer = NodePath("Timer")
 projectileMesh = NodePath("MeshInstance3D")
 collider = NodePath("CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1623724696]
-transform = Transform3D(21.775915, 0, 0, 0, -9.518555e-07, -21.775915, 0, 21.775915, -9.518555e-07, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_al6tu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2082028297]
-transform = Transform3D(21.775915, 0, 0, 0, -9.518555e-07, -21.775915, 0, 21.775915, -9.518555e-07, 0, 0, 0)
+transform = Transform3D(6.430231, 0, 0, 0, -2.20573e-07, -3.9226394, 0, 5.046122, -1.7146401e-07, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_al6tu")
 
 [node name="Timer" type="Timer" parent="." unique_id=50298078]

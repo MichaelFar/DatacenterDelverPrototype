@@ -34,13 +34,14 @@ public partial class Projectile : RigidBody3D
 	public void LaunchForward(Vector3 launch_direction)
 	{
 		SetEnableProjectile(true);
-		ApplyImpulse(launch_direction * forceMagnitude);
+		ApplyCentralImpulse(launch_direction * forceMagnitude);
 		lifeTimeTimer.Start();
 		
 	}
 
 	private void SetEnableProjectile(bool new_value)
 	{
+		
 		isLive = new_value;
 		projectileMesh.Visible = new_value;
 		collider.Disabled = !new_value;
@@ -51,6 +52,7 @@ public partial class Projectile : RigidBody3D
 		}
 		if(new_value)
 		{
+			LinearVelocity = Vector3.Zero;
 			GlobalPosition = originPoint.GlobalPosition;
 			GlobalRotation = originPoint.GlobalRotation;
 		}

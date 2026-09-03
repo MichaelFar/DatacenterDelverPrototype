@@ -28,7 +28,6 @@ height = 1.1391602
 script = ExtResource("5_d2e3b")
 projectileScene = ExtResource("5_k7vxe")
 fireMode = 0
-fireCooldown = 0.2
 metadata/_custom_type_script = "uid://bqi47dvxyyyq"
 
 [sub_resource type="Curve3D" id="Curve3D_c6vs4"]

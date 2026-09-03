@@ -86,7 +86,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
     {
         GD.Print("Fired primary");
 		int projectile_index = weaponData.maxAmmoInMagazine - weaponData.currentAmmoInMagazine;
-		projectilePool[projectile_index].LaunchForward(-firePoint.Basis.Z);
+		projectilePool[projectile_index].LaunchForward(-firePoint.GlobalBasis.Z);
 		
 		weaponData.currentAmmoInMagazine -=1;
     }
