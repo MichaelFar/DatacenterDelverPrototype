@@ -28,6 +28,7 @@ height = 1.1391602
 script = ExtResource("5_d2e3b")
 projectileScene = ExtResource("5_k7vxe")
 fireMode = 0
+recoil = 1.0
 metadata/_custom_type_script = "uid://bqi47dvxyyyq"
 
 [sub_resource type="Curve3D" id="Curve3D_c6vs4"]
@@ -63,14 +64,14 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0
 curve = SubResource("Curve3D_c6vs4")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="Path3D" unique_id=289844958]
-transform = Transform3D(-0.074219026, 0, 0.9972105, 0, 0.9999844, 0, -0.99718845, 0, -0.074220665, 0.028143004, 0.013654119, -0.055275064)
+transform = Transform3D(-0.074218966, 0, 0.99720955, 0, 0.9999844, 0, -0.99718773, 0, -0.07422059, 0.028143004, 0.013654119, -0.055275064)
 progress = 0.17
 rotation_mode = 1
 use_model_front = true
 loop = false
 
 [node name="blasterRotationParent" parent="Path3D/PathFollow3D" unique_id=1107578817 instance=ExtResource("4_u6lk0")]
-transform = Transform3D(0.070227064, 0.055096876, 0.9960081, 0.00014681053, 0.998473, -0.055243567, -0.9975313, 0.004025816, 0.070111714, -0.36307117, -0.0789016, 0.0010003708)
+transform = Transform3D(0.06975652, 0, 0.9975639, 0, 1, 0, -0.9975643, 0, 0.06975649, -0.363, -0.13, -0.06)
 
 [node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent" index="0" unique_id=2032008314]
 visible = false
