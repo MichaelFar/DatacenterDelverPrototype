@@ -14,5 +14,7 @@ public partial class WeaponData : Resource
 
     [Export] public float fireCooldown = 0.05f;
 
+    [Export] public float recoil = 3.0f;
+
     public enum e_FireType {Automatic, Semiautomatic};
 }

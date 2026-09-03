@@ -18,7 +18,7 @@ height = 0.052
 
 [node name="Projectile" type="RigidBody3D" unique_id=5267562 node_paths=PackedStringArray("lifeTimeTimer", "projectileMesh", "collider")]
 script = ExtResource("1_q1jpp")
-forceMagnitude = 100.0
+forceMagnitude = 75.0
 lifeTimeTimer = NodePath("Timer")
 projectileMesh = NodePath("MeshInstance3D")
 collider = NodePath("CollisionShape3D")

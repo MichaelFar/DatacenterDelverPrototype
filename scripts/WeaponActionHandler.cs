@@ -9,7 +9,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 
 	[Export] WeaponData weaponData;
 	[Export] Node3D firePoint;
-
+	[Signal]public delegate void ev_RecoilPresentEventHandler(Vector2 recoil_vector, float magnitude);
 	private bool isReloading = false;
 
 	private float playerHoldDuration = 0.0f;
@@ -49,7 +49,8 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			}
 			else if(Input.IsActionJustReleased("PrimaryFire"))
 			{
-				playerHoldDuration = Mathf.Lerp(playerHoldDuration, 0.0f, delta);
+				playerHoldDuration = 0.0f;
+				EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
 			}
 		}
 		else
@@ -61,7 +62,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 				Shoot();
 				
 				SceneTreeTimer shoot_timer = GetTree().CreateTimer(weaponData.fireCooldown);
-				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;};
+				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);};
 			}
 		}
 		
@@ -70,7 +71,6 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			Reload();
 		}
 
-		
 	}
 
     public bool CanShoot()
@@ -79,15 +79,19 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 		{
 			return true;
 		}
+		EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
 		return false;
     }
 
     public void Shoot()
     {
+		RandomNumberGenerator rand_obj = new RandomNumberGenerator();
+
+		Vector2 rand_direction = new Vector2(rand_obj.RandfRange(0.0f,1.0f),rand_obj.RandfRange(0.0f,1.0f));
         GD.Print("Fired primary");
 		int projectile_index = weaponData.maxAmmoInMagazine - weaponData.currentAmmoInMagazine;
 		projectilePool[projectile_index].LaunchForward(-firePoint.GlobalBasis.Z);
-		
+		EmitSignal(SignalName.ev_RecoilPresent, rand_direction, weaponData.recoil);
 		weaponData.currentAmmoInMagazine -=1;
     }
 
@@ -97,6 +101,4 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
         weaponData.currentAmmoInMagazine = weaponData.maxAmmoInMagazine;
     }
 	
-    
-
 }

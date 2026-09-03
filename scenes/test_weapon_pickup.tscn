@@ -84,5 +84,6 @@ transform = Transform3D(0.9999999, -5.820766e-11, -9.313226e-10, -1.4551915e-11,
 
 [connection signal="ev_ProcessInput" from="." to="WeaponActionHandler" method="ProcessInput"]
 [connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]
+[connection signal="ev_RecoilPresent" from="WeaponActionHandler" to="." method="SetSwayMods"]
 
 [editable path="Path3D/PathFollow3D/blasterRotationParent"]
