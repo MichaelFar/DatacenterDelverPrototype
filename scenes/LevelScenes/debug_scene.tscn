@@ -28,6 +28,11 @@ albedo_color = Color(0.39232534, 0.39232537, 0.39232534, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_3uhrl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_al6tu"]
+size = Vector3(0.9902191, 1.0892792, 1.1315918)
+
 [node name="DebugScene" type="Node3D" unique_id=390269057]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1191665713]
@@ -52,6 +57,7 @@ mesh = SubResource("PlaneMesh_wd65j")
 surface_material_override/0 = SubResource("StandardMaterial3D_kv4ol")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=1606280589]
+collision_layer = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=628742068]
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
@@ -73,6 +79,17 @@ interactText = "Rigid body"
 
 [node name="WeaponPickup" parent="." unique_id=1825592308 instance=ExtResource("4_x7aig")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2649515, 0.4649946, 0.38830808)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1236685703]
+transform = Transform3D(44.05781, 0, 0, 0, 12.824832, 0, 0, 0, 1, -3.6363616, 6.81527, 24.738106)
+mesh = SubResource("BoxMesh_3uhrl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=906697901]
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=1064686259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00014843792, -0.024314463, 0.0657959)
+shape = SubResource("BoxShape3D_al6tu")
 
 [connection signal="ev_OnInteract" from="InteractArea" to="InteractArea" method="SetCanInteractToFalse"]
 

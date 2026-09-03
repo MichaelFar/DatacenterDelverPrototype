@@ -39,6 +39,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 	private float firedTimer = 0.0f;
 	public void ProcessInput(float delta)
 	{
+		float currentCooldown = weaponData.fireCooldown;
 		if(hasFired)
 		{
 			firedTimer += delta;
@@ -79,11 +80,13 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			{
 				
 				//firedTimer = weaponData.fireCooldown;
-				firedTimer = 0.0f;
-				hasFired = false;
+				//firedTimer = 0.0f;
+				//hasFired = false;
 				//EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
-				
-				SceneTreeTimer shoot_timer = GetTree().CreateTimer(weaponData.fireCooldown - playerHoldDuration);
+				currentCooldown *= 0.3f;
+				firedTimer = 0.0f;
+				SceneTreeTimer shoot_timer = GetTree().CreateTimer(Mathf.Clamp(currentCooldown - playerHoldDuration, 0.0f, currentCooldown));
+				//firedTimer = weaponData.fireCooldown - firedTimer;
 				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);};
 				//hasFired = false;
 			}
@@ -101,7 +104,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			}
 		}
 		//EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection * (1.0f - (playerHoldDuration / weaponData.fireCooldown)), weaponData.recoil);
-		if(playerHoldDuration == 0.0f && Input.IsActionJustReleased("Reload"))
+		if(!hasFired && Input.IsActionJustReleased("Reload"))
 		{
 			Reload();
 		}

@@ -53,6 +53,7 @@ public partial class Projectile : RigidBody3D
 		if(new_value)
 		{
 			LinearVelocity = Vector3.Zero;
+			AngularVelocity = Vector3.Zero;
 			GlobalPosition = originPoint.GlobalPosition;
 			GlobalRotation = originPoint.GlobalRotation;
 		}
