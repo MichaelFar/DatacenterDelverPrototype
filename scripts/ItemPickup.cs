@@ -164,7 +164,7 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 				swayReferenceObject.RotationDegrees.X - (-sway_mod_vector.X * 250.0f + (mouseMovement.Y * item_anim_data.xWeaponRotation)) * delta, 
 				item_anim_data.xWeaponRotationPosition), 
 				(float)Mathf.Lerp(RotationDegrees.Y, 
-				swayReferenceObject.RotationDegrees.Y + (-sway_mod_vector.Y * 100.0f + (mouseMovement.X * item_anim_data.yWeaponRotation)) * delta, 
+				swayReferenceObject.RotationDegrees.Y + (-sway_mod_vector.Y * 35.0f + (mouseMovement.X * item_anim_data.yWeaponRotation)) * delta, 
 			
 			item_anim_data.yWeaponRotationPosition), Rotation.Z);
 			

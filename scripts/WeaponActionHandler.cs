@@ -14,6 +14,8 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 
 	private float playerHoldDuration = 0.0f;
 	private List<Projectile> projectilePool = new List<Projectile>();
+	private Vector2 currentRecoilDirection;
+	private bool hasFired = false;
 	public override void _Ready()
 	{
 		InstantiateProjectiles();
@@ -34,23 +36,56 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			projectile_instance.originPoint = firePoint;
 		}
 	}
+	private float firedTimer = 0.0f;
 	public void ProcessInput(float delta)
 	{
+		if(hasFired)
+		{
+			firedTimer += delta;
+			EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection, weaponData.recoil * (1.0f - (firedTimer / weaponData.fireCooldown)));
+			if(firedTimer >= weaponData.fireCooldown)
+			{
+				firedTimer = 0.0f;
+				hasFired = false;
+				//playerHoldDuration = 0.0f;
+				
+			}
+			//GD.Print("Recoil vector is " + )
+			
+		}
+		else
+		{
+			currentRecoilDirection = Vector2.Zero;
+		}
 		if(weaponData.fireMode == WeaponData.e_FireType.Automatic)
 		{
 			if(Input.IsActionPressed("PrimaryFire") && CanShoot())
 			{
+				if(playerHoldDuration == 0.0f)
+				{
+					Shoot();
+				}
 				playerHoldDuration += delta;
 				if(playerHoldDuration >= weaponData.fireCooldown)
 				{
 					playerHoldDuration = 0.0f;
-					Shoot();
+					//hasFired = false;
+					
 				}
+				//EmitSignal(SignalName.ev_RecoilPresent, new Vector2().Lerp(Vector2.Zero, playerHoldDuration / weaponData.fireCooldown), weaponData.recoil);
+				
 			}
 			else if(Input.IsActionJustReleased("PrimaryFire"))
 			{
-				playerHoldDuration = 0.0f;
-				EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
+				
+				//firedTimer = weaponData.fireCooldown;
+				firedTimer = 0.0f;
+				hasFired = false;
+				//EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
+				
+				SceneTreeTimer shoot_timer = GetTree().CreateTimer(weaponData.fireCooldown - playerHoldDuration);
+				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);};
+				//hasFired = false;
 			}
 		}
 		else
@@ -62,10 +97,10 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 				Shoot();
 				
 				SceneTreeTimer shoot_timer = GetTree().CreateTimer(weaponData.fireCooldown);
-				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);};
+				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;/*EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f)*/};// hasFired = false;};
 			}
 		}
-		
+		//EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection * (1.0f - (playerHoldDuration / weaponData.fireCooldown)), weaponData.recoil);
 		if(playerHoldDuration == 0.0f && Input.IsActionJustReleased("Reload"))
 		{
 			Reload();
@@ -79,19 +114,20 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 		{
 			return true;
 		}
-		EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
+		//EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
 		return false;
     }
 
     public void Shoot()
     {
 		RandomNumberGenerator rand_obj = new RandomNumberGenerator();
-
+		hasFired = true;
 		Vector2 rand_direction = new Vector2(rand_obj.RandfRange(0.0f,1.0f),rand_obj.RandfRange(0.0f,1.0f));
         GD.Print("Fired primary");
 		int projectile_index = weaponData.maxAmmoInMagazine - weaponData.currentAmmoInMagazine;
 		projectilePool[projectile_index].LaunchForward(-firePoint.GlobalBasis.Z);
-		EmitSignal(SignalName.ev_RecoilPresent, rand_direction, weaponData.recoil);
+		currentRecoilDirection = rand_direction;
+		//EmitSignal(SignalName.ev_RecoilPresent, rand_direction, weaponData.recoil);
 		weaponData.currentAmmoInMagazine -=1;
     }
 
