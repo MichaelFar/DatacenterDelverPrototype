@@ -16,6 +16,8 @@ public partial class Projectile : RigidBody3D
 	private float currentLifeTime = 0.0f;
 	[Export] private MeshInstance3D projectileMesh;
 	[Export] private CollisionShape3D collider;
+	RandomNumberGenerator rand_obj = new RandomNumberGenerator();
+	public float spread = 0.0f;
 
 	
 	public Node3D originPoint;
@@ -33,12 +35,28 @@ public partial class Projectile : RigidBody3D
 	}
 	public void LaunchForward(Vector3 launch_direction)
 	{
+		
+		
 		SetEnableProjectile(true);
+
+		launch_direction += -GetSpreadDir(Basis);
+		launch_direction = launch_direction.Normalized();
 		ApplyCentralImpulse(launch_direction * forceMagnitude);
 		lifeTimeTimer.Start();
 		
 	}
-
+	private Vector3 GetSpreadDir(Basis reference_basis)
+	{
+		float twist = rand_obj.RandfRange(0, Mathf.Tau);
+		Vector3 axis = new Vector3(Mathf.Cos(twist), Mathf.Sin(twist), 0);
+		
+		float angle = (float)(1.0 -Mathf.Sqrt(1.0 - Mathf.Sqrt(rand_obj.Randf()))) * spread;// # Superior distribution
+		//#var angle := sqrt(randf()) * spread_degrees # Uniform spread, use instead if prefered
+		
+		//# Negative because cameras in Godot point backwards
+		return reference_basis.Z.Rotated(reference_basis * axis, angle);
+	}
+		
 	private void SetEnableProjectile(bool new_value)
 	{
 		

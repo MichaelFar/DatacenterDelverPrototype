@@ -33,6 +33,7 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 
 	private Vector2 swayModVector = Vector2.Zero;
 	private float swayModVectorMagnitude = 0.0f;
+	private float deltaCoefficient = 1.0f;
 	public override void _Ready()
 	{
 		if(swayPath != null)
@@ -161,7 +162,7 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 			Transform = held_item_transform;
 			
 			RotationDegrees = new Vector3((float)Mathf.Lerp(RotationDegrees.X, 
-				swayReferenceObject.RotationDegrees.X - (-sway_mod_vector.X * 250.0f + (mouseMovement.Y * item_anim_data.xWeaponRotation)) * delta, 
+				swayReferenceObject.RotationDegrees.X - (-sway_mod_vector.X * 250.0f + (mouseMovement.Y * item_anim_data.xWeaponRotation)) *delta, 
 				item_anim_data.xWeaponRotationPosition), 
 				(float)Mathf.Lerp(RotationDegrees.Y, 
 				swayReferenceObject.RotationDegrees.Y + (-sway_mod_vector.Y * 35.0f + (mouseMovement.X * item_anim_data.yWeaponRotation)) * delta, 
