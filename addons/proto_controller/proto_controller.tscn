@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bhnjcojhoqvol" path="res://addons/proto_controller/HandPoint.cs" id="1_5hfox"]
 [ext_resource type="Script" uid="uid://ddn6kee0qfyce" path="res://addons/proto_controller/ProtoController.cs" id="1_6dqce"]
 [ext_resource type="Script" uid="uid://5fwcbgii6b8r" path="res://addons/proto_controller/InteractionHandler.cs" id="2_wr06p"]
+[ext_resource type="Texture2D" uid="uid://bory2m6i3rf8g" path="res://sprites/UISprites/crosshairs_tilesheet_white.png" id="3_0rk7u"]
 [ext_resource type="Script" uid="uid://je8vu0uby6xg" path="res://scripts/InteractPrompt.cs" id="3_5hfox"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
@@ -17,6 +18,10 @@ radius = 0.4
 height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3uhrl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3uhrl"]
+atlas = ExtResource("3_0rk7u")
+region = Rect2(8, 353, 48, 48)
 
 [node name="ProtoController" type="CharacterBody3D" unique_id=1412936445 node_paths=PackedStringArray("_collider", "_head")]
 script = ExtResource("1_6dqce")
@@ -45,9 +50,34 @@ target_position = Vector3(0, 0, 0)
 collide_with_areas = true
 
 [node name="HandPoint" type="MeshInstance3D" parent="Head/Camera3D" unique_id=898601821 node_paths=PackedStringArray("playerController")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19942749, -0.22382617, -0.5941617)
+transform = Transform3D(0.9998477, 0, 0.017452406, 0, 1, 0, -0.017452406, 0, 0.9998477, 0.19942749, -0.22382617, -0.5941617)
 script = ExtResource("1_5hfox")
 playerController = NodePath("../../..")
+
+[node name="Control" type="Control" parent="Head/Camera3D" unique_id=748549722]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="Head/Camera3D/Control" unique_id=1253391817]
+modulate = Color(1, 1, 1, 0.4745098)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_3uhrl")
 
 [node name="InteractionHandler" type="Node3D" parent="." unique_id=391186281 node_paths=PackedStringArray("interactionShape", "interactHudElement")]
 script = ExtResource("2_wr06p")

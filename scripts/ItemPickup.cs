@@ -115,13 +115,13 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 
     public void UsePrimaryMode()
     {
-        GD.Print("Primary Mode Used");
+       // GD.Print("Primary Mode Used");
 		EmitSignal(SignalName.ev_UsedPrimary);
     }
 
     public void UseAlternateMode()
     {
-        GD.Print("Alternate Mode Used");
+        //GD.Print("Alternate Mode Used");
 		EmitSignal(SignalName.ev_UsedAlternate);
     }
 

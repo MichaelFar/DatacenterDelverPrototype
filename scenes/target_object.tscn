@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dt3647my42tde"]
+
+[ext_resource type="Script" uid="uid://gx8aurnhthrk" path="res://scripts/DamageableObject.cs" id="1_kfbfx"]
+[ext_resource type="PackedScene" uid="uid://d3vntbnrcyvvp" path="res://ModelDump/targetA.fbx" id="2_j40ee"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3uhrl"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
+
+[node name="TargetObject" type="StaticBody3D" unique_id=1941884991]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_kfbfx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=101649823]
+shape = SubResource("BoxShape3D_3uhrl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=816935424]
+mesh = SubResource("BoxMesh_al6tu")
+
+[node name="targetA" parent="." unique_id=1675220205 instance=ExtResource("2_j40ee")]
+transform = Transform3D(-1.0000001, 0, 2.4872895e-07, 0, 2.897925, 0, -8.7422784e-08, 0, -2.8451276, 0.5255375, 0.021129906, 0.006046772)
+
+[node name="Timer" type="Timer" parent="." unique_id=964620304]
+
+[connection signal="ev_HealthDepleted" from="." to="CollisionShape3D" method="set_disabled" binds= [true]]
+[connection signal="ev_HealthDepleted" from="." to="MeshInstance3D" method="set_visible" binds= [false]]
+[connection signal="ev_HealthDepleted" from="." to="targetA/targetA" method="set_visible" binds= [false]]
+[connection signal="ev_HealthDepleted" from="." to="Timer" method="start" binds= [1.0]]
+[connection signal="timeout" from="Timer" to="Timer" method="stop"]
+[connection signal="timeout" from="Timer" to="." method="HealAmount" binds= [100.0]]
+[connection signal="timeout" from="Timer" to="CollisionShape3D" method="set_disabled" binds= [false]]
+[connection signal="timeout" from="Timer" to="MeshInstance3D" method="set_visible" binds= [true]]
+[connection signal="timeout" from="Timer" to="targetA/targetA" method="set_visible" binds= [true]]
+
+[editable path="targetA"]

@@ -47,9 +47,18 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 		
 		if(hasFired)
 		{
+			
 			firedTimer += delta * current_delta_coefficient;
 			firedTimer = Mathf.Clamp(firedTimer, 0.0f, 1.0f);
-			EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection, weaponData.recoil * Mathf.Abs(1.0f - (firedTimer / weaponData.fireCooldown)));
+			if(weaponData.recoilCurve == null)
+			{
+				EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection, weaponData.recoil * Mathf.Abs(1.0f - (firedTimer / weaponData.fireCooldown)));
+			}
+			else
+			{
+				EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection, weaponData.recoil * weaponData.recoilCurve.Curve.Sample(Mathf.Abs(1.0f - (firedTimer / weaponData.fireCooldown))));
+			}
+			
 			if(firedTimer >= weaponData.fireCooldown)
 			{
 				firedTimer = 0.0f;
@@ -71,6 +80,10 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 				if(playerHoldDuration == 0.0f)
 				{
 					Shoot();
+					SceneTreeTimer shoot_timer = GetTree().CreateTimer(Mathf.Clamp(currentCooldown - playerHoldDuration, 0.0f, currentCooldown));
+				//firedTimer = weaponData.fireCooldown - firedTimer;
+					current_delta_coefficient = 0.8f;
+					shoot_timer.Timeout += () => {if(!hasFired){EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);playerHoldDuration = 0.0f;}};
 				}
 				playerHoldDuration += delta;
 				if(playerHoldDuration >= weaponData.fireCooldown)
@@ -85,30 +98,22 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			else if(Input.IsActionJustReleased("PrimaryFire"))
 			{
 				
-				//firedTimer = weaponData.fireCooldown;
-				//firedTimer = 0.0f;
-				//hasFired = false;
-				//EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);
+				
 				currentCooldown *= 0.3f;
 				firedTimer = 0.0f;
-				//shootTimer.WaitTime = Mathf.Clamp(currentCooldown - playerHoldDuration, 0.0f, currentCooldown)
-				SceneTreeTimer shoot_timer = GetTree().CreateTimer(Mathf.Clamp(currentCooldown - playerHoldDuration, 0.0f, currentCooldown));
-				//firedTimer = weaponData.fireCooldown - firedTimer;
-				current_delta_coefficient = 4.0f;
-				shoot_timer.Timeout += () => {playerHoldDuration = 0.0f;if(!hasFired)EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);};
-				//hasFired = false;
+				
 			}
 		}
 		else
 		{
-			if(Input.IsActionJustPressed("PrimaryFire") && CanShoot() && playerHoldDuration == 0.0f)
+			if(Input.IsActionJustPressed("PrimaryFire") && CanShoot() && !hasFired)
 			{
-				playerHoldDuration += delta;
+				
 				
 				Shoot();
 				current_delta_coefficient = 4.0f;
 				SceneTreeTimer shoot_timer = GetTree().CreateTimer(weaponData.fireCooldown);
-				shoot_timer.Timeout += () => {if(!hasFired)playerHoldDuration = 0.0f;/*EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f)*/};// hasFired = false;};
+				shoot_timer.Timeout += () => {if(!hasFired){playerHoldDuration = 0.0f;EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);}};// hasFired = false;};
 			}
 		}
 		//EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection * (1.0f - (playerHoldDuration / weaponData.fireCooldown)), weaponData.recoil);
@@ -134,7 +139,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 		RandomNumberGenerator rand_obj = new RandomNumberGenerator();
 		hasFired = true;
 		Vector2 rand_direction = new Vector2(rand_obj.RandfRange(0.3f,1.0f),rand_obj.RandfRange(0.2f,1.0f));
-        GD.Print("Fired primary");
+        //GD.Print("Fired primary");
 		int projectile_index = weaponData.maxAmmoInMagazine - weaponData.currentAmmoInMagazine;
 		projectilePool[projectile_index].spread = weaponData.weaponSpread;
 		projectilePool[projectile_index].LaunchForward(-firePoint.GlobalBasis.Z);

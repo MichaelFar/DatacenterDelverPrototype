@@ -21,6 +21,8 @@ height = 0.052
 collision_mask = 2
 collision_priority = 200.0
 continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_q1jpp")
 forceMagnitude = 200.0
 lifeTimeTimer = NodePath("Timer")
@@ -36,3 +38,5 @@ transform = Transform3D(6.430231, 0, 0, 0, -2.20573e-07, -3.9226394, 0, 5.046122
 mesh = SubResource("CapsuleMesh_al6tu")
 
 [node name="Timer" type="Timer" parent="." unique_id=50298078]
+
+[connection signal="body_entered" from="." to="." method="DamageOther"]

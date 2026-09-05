@@ -16,6 +16,8 @@ public partial class Projectile : RigidBody3D
 	private float currentLifeTime = 0.0f;
 	[Export] private MeshInstance3D projectileMesh;
 	[Export] private CollisionShape3D collider;
+
+	[Export] private float damage = 10.0f;
 	RandomNumberGenerator rand_obj = new RandomNumberGenerator();
 	public float spread = 0.0f;
 
@@ -26,6 +28,8 @@ public partial class Projectile : RigidBody3D
 		SetEnableProjectile(false);
 		lifeTimeTimer.WaitTime = lifeTime;
 		lifeTimeTimer.Timeout += () => SetEnableProjectile(false);
+		
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -75,5 +79,18 @@ public partial class Projectile : RigidBody3D
 			GlobalPosition = originPoint.GlobalPosition;
 			GlobalRotation = originPoint.GlobalRotation;
 		}
+	}
+
+	private void DamageOther(Node object_to_damage)
+	{
+		IDamageable damageable_object = object_to_damage as IDamageable;
+		if(damageable_object != null)
+		{
+			if(damageable_object.CanTakeDamage())
+			{
+				damageable_object.TakeDamage(damage);
+			}
+		}
+		
 	}
 }

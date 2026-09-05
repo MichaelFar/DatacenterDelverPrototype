@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dy2un1ut5beqp"
-path="res://.godot/imported/blasterA.fbx-ce4f7e6b3320e6a47f57922494a24534.scn"
+uid="uid://nntqs0svd638"
+path="res://.godot/imported/blasterP.fbx-e5a7839b14884340f26d54f5e4a4f74e.scn"
 
 [deps]
 
-source_file="res://ModelDump/blasterA.fbx"
-dest_files=["res://.godot/imported/blasterA.fbx-ce4f7e6b3320e6a47f57922494a24534.scn"]
+source_file="res://ModelDump/WeaponModels/blasterP.fbx"
+dest_files=["res://.godot/imported/blasterP.fbx-e5a7839b14884340f26d54f5e4a4f74e.scn"]
 
 [params]
 

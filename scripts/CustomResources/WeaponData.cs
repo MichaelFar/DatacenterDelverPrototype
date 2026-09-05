@@ -16,6 +16,8 @@ public partial class WeaponData : Resource
 
     [Export] public float recoil = 3.0f;
 
+    [Export] public CurveTexture recoilCurve;
+
 
     public enum e_FireType {Automatic, Semiautomatic};
 }

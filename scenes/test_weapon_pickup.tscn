@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d2hjcousisg1r" path="res://scripts/ItemPickup.cs" id="1_jd0is"]
 [ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="2_u6lk0"]
 [ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_c6vs4"]
-[ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/blasterA.fbx" id="4_u6lk0"]
+[ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/WeaponModels/blasterA.fbx" id="4_u6lk0"]
 [ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="5_c6vs4"]
 [ext_resource type="Script" uid="uid://bqi47dvxyyyq" path="res://scripts/CustomResources/WeaponData.cs" id="5_d2e3b"]
 [ext_resource type="PackedScene" uid="uid://j2ftuynwefip" path="res://scenes/ProjectileScenes/projectile.tscn" id="5_k7vxe"]
@@ -31,7 +31,7 @@ weaponSpread = 0.2
 projectileScene = ExtResource("5_k7vxe")
 fireMode = 0
 fireCooldown = 0.05
-recoil = 12.0
+recoil = 10.0
 metadata/_custom_type_script = "uid://bqi47dvxyyyq"
 
 [sub_resource type="Curve3D" id="Curve3D_c6vs4"]
@@ -78,7 +78,7 @@ loop = false
 [node name="blasterRotationParent" parent="Path3D/PathFollow3D" unique_id=1107578817 instance=ExtResource("4_u6lk0")]
 transform = Transform3D(0.06975652, 0, 0.9975639, 0, 1, 0, -0.9975643, 0, 0.06975649, -0.363, -0.13, -0.06)
 
-[node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent" index="0" unique_id=2032008314]
+[node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent" index="0" unique_id=640299026]
 visible = false
 mesh = null
 

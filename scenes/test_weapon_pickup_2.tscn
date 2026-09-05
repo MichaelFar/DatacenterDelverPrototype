@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="4_ttuse"]
 [ext_resource type="PackedScene" uid="uid://j2ftuynwefip" path="res://scenes/ProjectileScenes/projectile.tscn" id="5_cuxfl"]
 [ext_resource type="Script" uid="uid://bqi47dvxyyyq" path="res://scripts/CustomResources/WeaponData.cs" id="6_hwpg5"]
-[ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/blasterA.fbx" id="7_xj8cn"]
+[ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/WeaponModels/blasterA.fbx" id="7_xj8cn"]
 
 [sub_resource type="Resource" id="Resource_3uhrl"]
 resource_local_to_scene = true
