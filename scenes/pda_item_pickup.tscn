@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://b7unqlks80gkb"]
+
+[ext_resource type="Script" uid="uid://d2hjcousisg1r" path="res://scripts/ItemPickup.cs" id="1_guvb6"]
+[ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="2_3llpc"]
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_4yd5l"]
+[ext_resource type="Script" uid="uid://dp4linn7ncnot" path="res://scripts/PDAManager.cs" id="4_3llpc"]
+
+[sub_resource type="Resource" id="Resource_3uhrl"]
+resource_local_to_scene = true
+script = ExtResource("2_3llpc")
+yWeaponSway = 0.1
+xWeaponSway = 0.2
+yWeaponSwayPosition = 0.2
+xWeaponSwayPosition = 0.3
+yWeaponRotation = 17.9
+xWeaponRotation = 19.2
+yWeaponRotationPosition = 0.2
+xWeaponRotationPosition = 0.2
+itemType = 1
+metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_guvb6"]
+points = PackedVector3Array(0.1834272, 0.30519, 0.066199996, -0.17594424, -0.30006713, -0.066199996, -0.17898594, -0.30519, 0.066199996, 0.1834272, -0.30519, 0.066199996, -0.17898594, 0.30519, 0.066199996, 0.1803855, 0.30006713, -0.066199996, -0.17594424, 0.30006713, -0.066199996, 0.1803855, -0.30006713, -0.066199996)
+
+[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
+size = Vector3(0.36927795, 0.6361084, 0.13232422)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_guvb6"]
+viewport_path = NodePath("TestItemPickup/MeshInstance3D/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_guvb6"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_guvb6")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_al6tu"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_guvb6")
+size = Vector2(0.315, 0.5)
+
+[node name="PDAItemPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea")]
+collision_layer = 0
+script = ExtResource("1_guvb6")
+itemAnimationData = SubResource("Resource_3uhrl")
+myArea = NodePath("TestItemPickup/InteractArea2")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=1974301461]
+transform = Transform3D(0.90693593, 0, 0.42126852, 0, 1, 0, -0.42126852, 0, 0.90693593, 0, 0.3101009, 0)
+shape = SubResource("ConvexPolygonShape3D_guvb6")
+
+[node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
+
+[node name="InteractArea2" parent="TestItemPickup" unique_id=1263587914 instance=ExtResource("3_4yd5l")]
+interactText = "Pickup PDA"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestItemPickup" unique_id=1702630979]
+transform = Transform3D(0.90693593, 0, 0.42126852, 0, 1, 0, -0.42126852, 0, 0.90693593, 0, 0.3101009, 0)
+mesh = SubResource("BoxMesh_al6tu")
+
+[node name="SubViewport" type="SubViewport" parent="TestItemPickup/MeshInstance3D" unique_id=151743744]
+size = Vector2i(323, 512)
+
+[node name="Label" type="Label" parent="TestItemPickup/MeshInstance3D/SubViewport" unique_id=500528781]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "test 1
+ "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="TestItemPickup/MeshInstance3D/SubViewport" unique_id=350870052]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "test 2
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="TestItemPickup/MeshInstance3D/SubViewport" unique_id=177251242]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "test 3
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScreenPlane" type="MeshInstance3D" parent="TestItemPickup" unique_id=1283012077]
+transform = Transform3D(0.90704393, 0.42103577, -1.8404059e-08, 0, -4.3711385e-08, -1, -0.42103577, 0.90704393, -3.9648153e-08, 0.033167362, 0.3671242, 0.07051611)
+mesh = SubResource("PlaneMesh_al6tu")
+
+[node name="PDAManager" type="Node3D" parent="TestItemPickup" unique_id=1001656569 node_paths=PackedStringArray("uiScreenArray")]
+script = ExtResource("4_3llpc")
+uiScreenArray = [NodePath("../MeshInstance3D/SubViewport/Label"), NodePath("../MeshInstance3D/SubViewport/Label2"), NodePath("../MeshInstance3D/SubViewport/Label3")]
+
+[connection signal="ev_Dropped" from="." to="TestItemPickup/PDAManager" method="SetIsHeld" binds= [false]]
+[connection signal="ev_PickedUp" from="." to="TestItemPickup/PDAManager" method="SetIsHeld" binds= [true]]
+[connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]

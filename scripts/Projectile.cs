@@ -18,6 +18,9 @@ public partial class Projectile : RigidBody3D
 	[Export] private CollisionShape3D collider;
 
 	[Export] private float damage = 10.0f;
+
+	[Export] public int numBounces = 0;
+	private int currentBounces = 0;
 	RandomNumberGenerator rand_obj = new RandomNumberGenerator();
 	public float spread = 0.0f;
 
@@ -25,6 +28,7 @@ public partial class Projectile : RigidBody3D
 	public Node3D originPoint;
 	public override void _Ready()
 	{
+		currentBounces = numBounces;
 		SetEnableProjectile(false);
 		lifeTimeTimer.WaitTime = lifeTime;
 		lifeTimeTimer.Timeout += () => SetEnableProjectile(false);
@@ -37,6 +41,12 @@ public partial class Projectile : RigidBody3D
 	{
 		
 	}
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+		//LinearVelocity = LinearVelocity.Normalized() * forceMagnitude;
+    }
+
 	public void LaunchForward(Vector3 launch_direction)
 	{
 		
@@ -74,6 +84,7 @@ public partial class Projectile : RigidBody3D
 		}
 		if(new_value)
 		{
+			currentBounces = numBounces;
 			LinearVelocity = Vector3.Zero;
 			AngularVelocity = Vector3.Zero;
 			GlobalPosition = originPoint.GlobalPosition;
@@ -91,6 +102,16 @@ public partial class Projectile : RigidBody3D
 				damageable_object.TakeDamage(damage);
 			}
 		}
+		if(!(currentBounces > 0))
+		{
+			SceneTreeTimer despawn_timer = GetTree().CreateTimer(0.1);
+			despawn_timer.Timeout += () => SetEnableProjectile(false);
+		}
+		else
+		{
+			currentBounces -=1;
+		}
+		
 		
 	}
 }

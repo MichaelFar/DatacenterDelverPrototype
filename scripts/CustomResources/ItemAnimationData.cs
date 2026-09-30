@@ -1,5 +1,10 @@
 using Godot;
 using System;
+using UsefulDataTypes;
+namespace UsefulDataTypes
+{
+    public enum ItemType {WEAPON, TOOL};
+}
 [GlobalClass]
 public partial class ItemAnimationData : Resource
 {
@@ -15,4 +20,6 @@ public partial class ItemAnimationData : Resource
     [Export]public Vector2 swayMax = new Vector2(20,20);
 
     
+
+    [Export] public ItemType itemType = ItemType.WEAPON;
 }

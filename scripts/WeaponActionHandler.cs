@@ -11,6 +11,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 	[Export] Node3D firePoint;
 	[Export] Timer shootTimer;
 	[Signal]public delegate void ev_RecoilPresentEventHandler(Vector2 recoil_vector, float magnitude);
+	[Signal]public delegate void ev_ReloadedEventHandler(float reload_time);
 	private bool isReloading = false;
 
 	private float playerHoldDuration = 0.0f;
@@ -18,6 +19,11 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 	private Vector2 currentRecoilDirection;
 	private bool hasFired = false;
 
+	private bool isHeld = false;
+
+	private Tween reloadTween;
+
+	[Export]private MeshInstance3D gunMeshNode;
 
 	public override void _Ready()
 	{
@@ -75,40 +81,42 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 		}
 		if(weaponData.fireMode == WeaponData.e_FireType.Automatic)
 		{
-			if(Input.IsActionPressed("PrimaryFire") && CanShoot())
+			if(reloadTween == null)
 			{
-				if(playerHoldDuration == 0.0f)
+				if(Input.IsActionPressed("PrimaryFire") && CanShoot())
 				{
-					Shoot();
-					SceneTreeTimer shoot_timer = GetTree().CreateTimer(Mathf.Clamp(currentCooldown - playerHoldDuration, 0.0f, currentCooldown));
-				//firedTimer = weaponData.fireCooldown - firedTimer;
-					current_delta_coefficient = 0.8f;
-					shoot_timer.Timeout += () => {if(!hasFired){EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);playerHoldDuration = 0.0f;}};
-				}
-				playerHoldDuration += delta;
-				if(playerHoldDuration >= weaponData.fireCooldown)
-				{
-					playerHoldDuration = 0.0f;
-					//hasFired = false;
+					if(playerHoldDuration == 0.0f)
+					{
+						Shoot();
+						SceneTreeTimer shoot_timer = GetTree().CreateTimer(Mathf.Clamp(currentCooldown - playerHoldDuration, 0.0f, currentCooldown));
+					//firedTimer = weaponData.fireCooldown - firedTimer;
+						current_delta_coefficient = 0.8f;
+						//shoot_timer.Timeout += () => {if(!hasFired){EmitSignal(SignalName.ev_RecoilPresent, Vector2.Zero, 0.0f);playerHoldDuration = 0.0f;}};
+					}
+					playerHoldDuration += delta;
+					if(playerHoldDuration >= weaponData.fireCooldown)
+					{
+						playerHoldDuration = 0.0f;
+						//hasFired = false;
+						
+					}
+					//EmitSignal(SignalName.ev_RecoilPresent, new Vector2().Lerp(Vector2.Zero, playerHoldDuration / weaponData.fireCooldown), weaponData.recoil);
 					
 				}
-				//EmitSignal(SignalName.ev_RecoilPresent, new Vector2().Lerp(Vector2.Zero, playerHoldDuration / weaponData.fireCooldown), weaponData.recoil);
-				
-			}
-			else if(Input.IsActionJustReleased("PrimaryFire"))
-			{
-				
-				
-				currentCooldown *= 0.3f;
-				firedTimer = 0.0f;
-				
+				else if(Input.IsActionJustReleased("PrimaryFire"))
+				{
+					
+					
+					currentCooldown *= 0.3f;
+					firedTimer = 0.0f;
+					
+				}
 			}
 		}
 		else
 		{
-			if(Input.IsActionJustPressed("PrimaryFire") && CanShoot() && !hasFired)
+			if(Input.IsActionJustPressed("PrimaryFire") && CanShoot() && !hasFired && reloadTween == null)
 			{
-				
 				
 				Shoot();
 				current_delta_coefficient = 4.0f;
@@ -117,7 +125,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 			}
 		}
 		//EmitSignal(SignalName.ev_RecoilPresent, currentRecoilDirection * (1.0f - (playerHoldDuration / weaponData.fireCooldown)), weaponData.recoil);
-		if(!hasFired && Input.IsActionJustReleased("Reload"))
+		if(!hasFired && Input.IsActionJustReleased("Reload") && isHeld && reloadTween == null)
 		{
 			Reload();
 		}
@@ -150,8 +158,23 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 
     public void Reload()
     {
+		/*
+		reloadTween = GetTree().CreateTween();
+		
+		reloadTween.TweenProperty(gunMeshNode, "position", Position.X - 1, weaponData.reloadTime / 2);
+
+		reloadTween.Finished += () => {reloadTween = GetTree().CreateTween();
+			reloadTween.SetParallel(true);
+			reloadTween.TweenProperty(gunMeshNode, "position", Position, weaponData.reloadTime / 2);}; 
+		//reloadTween.TweenProperty();
 		//Need to replace this with a more robust reloading
+		*/
         weaponData.currentAmmoInMagazine = weaponData.maxAmmoInMagazine;
     }
+
+	public void SetIsHeld(bool new_value)
+	{
+		isHeld = new_value;
+	}
 	
 }

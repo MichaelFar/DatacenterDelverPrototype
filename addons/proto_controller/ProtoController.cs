@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Godot;
 
@@ -35,6 +36,9 @@ public sealed partial class ProtoController : CharacterBody3D
     private float _baseSpeed = 7F;
 
     [Export]
+    private float _coyoteTime = 0.1f;
+
+    [Export]
     private float _jumpVelocity = 4.5F;
 
     [Export]
@@ -69,14 +73,24 @@ public sealed partial class ProtoController : CharacterBody3D
     private bool _freeFlying;
     [Export]private Node3D _head;
     private Vector2 _lookRotation = Vector2.Zero;
+
+    private SceneTreeTimer _coyoteTimer;
+    private bool _coyoteTimeActive = false;
     private bool _mouseCaptured;
 
+    [Export]
+    private int _jumpsAllowed = 1;
+
+    private int _currentJumps;
+
 	public bool isMoving = false;
+
+    Action CoyoteTimerReset = () => {};
     public override void _Ready()
     {
         base._Ready();
         
-        
+        _currentJumps = _jumpsAllowed;
         
         _lookRotation = new Vector2(_head.Rotation.X, Rotation.Y);
         EnsureInputMappings();
@@ -113,12 +127,44 @@ public sealed partial class ProtoController : CharacterBody3D
 
         if (_hasGravity && !IsOnFloor())
         {
-            Velocity += GetGravity() * (float) delta;
+            if(_coyoteTimer == null)
+            {
+                _coyoteTimer = GetTree().CreateTimer(_coyoteTime);
+                _coyoteTimeActive = true;
+                CoyoteTimerReset = () => {_coyoteTimeActive = false;};
+                _coyoteTimer.Timeout += CoyoteTimerReset;
+            }
+            if(!_coyoteTimeActive || _currentJumps < _jumpsAllowed)
+                Velocity += GetGravity() * (float) delta;
+            else
+            {
+                
+                Velocity  = Velocity with {Y = 0.0f};
+            }
         }
-
-        if (_canJump && Input.IsActionJustPressed(_inputJump) && IsOnFloor())
+        
+        
+        if ((_canJump && Input.IsActionJustPressed(_inputJump) && IsOnFloor()
+        || _canJump && Input.IsActionJustPressed(_inputJump)) && _currentJumps > 0)
         {
             Velocity = Velocity with { Y = _jumpVelocity };
+            GD.Print("Player jumped, Num jumps is " + _currentJumps);
+            _currentJumps -= 1;
+            if(_coyoteTimeActive)
+            {
+                if(CoyoteTimerReset != null)
+                {
+                    _coyoteTimer.Timeout -= CoyoteTimerReset;
+                }
+                _coyoteTimer = null;
+                _coyoteTimeActive = false;
+            }
+            
+        }
+        if(IsOnFloor() && _currentJumps <= 0 && Velocity.Y != _jumpVelocity)
+        {
+            GD.Print("Player is on floor and jumps is zero");
+            _currentJumps = _jumpsAllowed;
         }
 
         if (_canMove)

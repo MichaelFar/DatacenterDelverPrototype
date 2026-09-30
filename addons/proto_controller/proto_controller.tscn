@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://5fwcbgii6b8r" path="res://addons/proto_controller/InteractionHandler.cs" id="2_wr06p"]
 [ext_resource type="Texture2D" uid="uid://bory2m6i3rf8g" path="res://sprites/UISprites/crosshairs_tilesheet_white.png" id="3_0rk7u"]
 [ext_resource type="Script" uid="uid://je8vu0uby6xg" path="res://scripts/InteractPrompt.cs" id="3_5hfox"]
+[ext_resource type="Script" uid="uid://wxoo2dyrdgm3" path="res://scripts/ReticleBehavior.cs" id="4_h60nn"]
+[ext_resource type="Script" uid="uid://or0iu6lyhsht" path="res://scripts/ItemIconSubviewPortContainer.cs" id="7_ujot4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
 albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
@@ -19,12 +21,96 @@ height = 1.8
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3uhrl"]
 
+[sub_resource type="Animation" id="Animation_h60nn"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.19942749, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-0.22382617, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-0.5941617, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_0rk7u"]
+resource_name = "reload_placeholder"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0),
+"points": PackedFloat32Array(0.19942749, -0.25, 0, 0.25, 0, 0.19942749, -0.08238139, 0, 0, 0, 0.19942749, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.49428833, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0),
+"points": PackedFloat32Array(-0.22382617, -0.25, 0, 0.25, 0, -1.8744912, -0.08238139, 0.27511084, 0, 0, -0.22382617, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.49428833, 1)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0),
+"points": PackedFloat32Array(-0.5941617, -0.25, 0, 0.25, 0, -0.5941617, -0.08238139, 0, 0, 0, -0.5941617, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.49428833, 1)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h60nn"]
+_data = {
+&"RESET": SubResource("Animation_h60nn"),
+&"reload_placeholder": SubResource("Animation_0rk7u")
+}
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_3uhrl"]
 atlas = ExtResource("3_0rk7u")
 region = Rect2(8, 353, 48, 48)
 
 [node name="ProtoController" type="CharacterBody3D" unique_id=1412936445 node_paths=PackedStringArray("_collider", "_head")]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_6dqce")
+_canSprint = true
+_coyoteTime = 0.2
+_jumpVelocity = 3.0
+_inputSprint = &"Sprint"
 _collider = NodePath("Collider")
 _head = NodePath("Head")
 
@@ -42,6 +128,7 @@ shape = SubResource("CapsuleShape3D_iof21")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=493116619]
+cull_mask = 1048573
 
 [node name="ShapeCast3D" type="ShapeCast3D" parent="Head/Camera3D" unique_id=217328599]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.2211473, -0.86597514)
@@ -49,10 +136,25 @@ shape = SubResource("CapsuleShape3D_3uhrl")
 target_position = Vector3(0, 0, 0)
 collide_with_areas = true
 
-[node name="HandPoint" type="MeshInstance3D" parent="Head/Camera3D" unique_id=898601821 node_paths=PackedStringArray("playerController")]
+[node name="GunHandPoint" type="MeshInstance3D" parent="Head/Camera3D" unique_id=898601821 node_paths=PackedStringArray("playerController", "reloadAnimPlayer")]
 transform = Transform3D(0.9998477, 0, 0.017452406, 0, 1, 0, -0.017452406, 0, 0.9998477, 0.19942749, -0.22382617, -0.5941617)
 script = ExtResource("1_5hfox")
 playerController = NodePath("../../..")
+reloadAnimPlayer = NodePath("ReloadAnimationPlayer")
+
+[node name="ReloadAnimationPlayer" type="AnimationPlayer" parent="Head/Camera3D/GunHandPoint" unique_id=1458293241]
+libraries/ = SubResource("AnimationLibrary_h60nn")
+
+[node name="Marker3D" type="Marker3D" parent="Head/Camera3D/GunHandPoint" unique_id=1408249766]
+
+[node name="ToolHandPoint" type="MeshInstance3D" parent="Head/Camera3D" unique_id=1547987263 node_paths=PackedStringArray("playerController")]
+transform = Transform3D(0.9998477, 0, 0.017452406, 0, 1, 0, -0.017452406, 0, 0.9998477, -0.199, -0.224, -0.594)
+script = ExtResource("1_5hfox")
+playerController = NodePath("../../..")
+compatibleType = 1
+dropBind = &"DropTool"
+
+[node name="Marker3D" type="Marker3D" parent="Head/Camera3D/ToolHandPoint" unique_id=13396680]
 
 [node name="Control" type="Control" parent="Head/Camera3D" unique_id=748549722]
 layout_mode = 3
@@ -72,12 +174,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -24.0
-offset_top = -24.0
+offset_top = -12.0
 offset_right = 24.0
-offset_bottom = 24.0
+offset_bottom = 36.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_3uhrl")
+script = ExtResource("4_h60nn")
 
 [node name="InteractionHandler" type="Node3D" parent="." unique_id=391186281 node_paths=PackedStringArray("interactionShape", "interactHudElement")]
 script = ExtResource("2_wr06p")
@@ -98,4 +201,40 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("3_5hfox")
 
-[connection signal="ev_ThisColliderInteractedWith" from="InteractionHandler" to="Head/Camera3D/HandPoint" method="ProcessPotentialPickup"]
+[node name="Control" type="Control" parent="." unique_id=1118321318]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 1
+
+[node name="LeftHandItem" type="SubViewportContainer" parent="Control" unique_id=635702673]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -136.0
+offset_right = 153.0
+grow_vertical = 0
+stretch = true
+script = ExtResource("7_ujot4")
+itemType = 1
+
+[node name="RightHandItem" type="SubViewportContainer" parent="Control" unique_id=2035174672]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -153.0
+offset_top = -136.0
+grow_horizontal = 0
+grow_vertical = 0
+stretch = true
+script = ExtResource("7_ujot4")
+
+[connection signal="ev_ThisColliderInteractedWith" from="InteractionHandler" to="Head/Camera3D/GunHandPoint" method="ProcessPotentialPickup"]
+[connection signal="ev_ThisColliderInteractedWith" from="InteractionHandler" to="Head/Camera3D/ToolHandPoint" method="ProcessPotentialPickup"]
+[connection signal="ev_ThisColliderInteractedWith" from="InteractionHandler" to="Control/LeftHandItem" method="HandleItemPickupIcon"]
+[connection signal="ev_ThisColliderInteractedWith" from="InteractionHandler" to="Control/RightHandItem" method="HandleItemPickupIcon"]

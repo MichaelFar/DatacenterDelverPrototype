@@ -1,15 +1,17 @@
 using Godot;
 using System;
 using System.Runtime.CompilerServices;
+using UsefulDataTypes;
 
 public partial class HandPoint : MeshInstance3D
 {
 	// Called when the node enters the scene tree for the first time.
 	[Export] ProtoController playerController;
 
-
-
-	[Export]public ItemPickup heldItem;
+	[Export] public ItemType compatibleType = ItemType.WEAPON;
+	[Export]public AnimationPlayer reloadAnimPlayer;
+	[Export]private StringName dropBind = "DropWeapon";
+	public ItemPickup heldItem;
 
 	private bool isOccupied = false;
 
@@ -45,7 +47,7 @@ public partial class HandPoint : MeshInstance3D
 	public override void _PhysicsProcess(double delta)
 	{
 		//sway_weapon(delta);
-		if(Input.IsActionJustReleased("DropItem"))
+		if(Input.IsActionJustReleased(dropBind))
 		{
 			DropItem();
 		}
@@ -78,8 +80,11 @@ public partial class HandPoint : MeshInstance3D
 		GD.Print("Attempting to pickup item " + item_to_check);
 		if(test_pickup != null)
 		{
+			if(test_pickup.GetItemAnimationData().itemType == compatibleType)
+			{
+				PickupItem(test_pickup);
+			}
 			
-			PickupItem(test_pickup);
 		}
 	}
 	private void PickupItem(ItemPickup item_to_pickup)
@@ -115,6 +120,10 @@ public partial class HandPoint : MeshInstance3D
 		//heldItem.GlobalPosition = GlobalPosition;
 	}
 	
+	public void Reload(float reload_time)
+	{
+		
+	}
 	
 	
 

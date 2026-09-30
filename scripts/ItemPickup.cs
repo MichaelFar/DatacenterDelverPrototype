@@ -9,11 +9,14 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 	[Export] private InteractionArea myArea;
 	
 	[Export] private PathFollow3D swayPath;
+	[Export] private SubViewport itemIconModelViewport;
     [Signal]public delegate void ev_UsedPrimaryEventHandler();
 	[Signal]public delegate void ev_UsedAlternateEventHandler();
 
 	[Signal]public delegate void ev_ProcessInputEventHandler(float delta);
-
+	[Signal]public delegate void ev_ReloadedEventHandler(float reload_time);
+	[Signal]public delegate void ev_DroppedEventHandler();
+	[Signal]public delegate void ev_PickedUpEventHandler();
 	Vector2 mouseMovement;
 	Tween globalMovementTween;
 
@@ -54,7 +57,7 @@ public partial class ItemPickup : RigidBody3D, IUseItem
     }
 	public void BecomeHeld()
 	{
-		
+		EmitSignal(SignalName.ev_PickedUp);
 		SetFreeze(true);
 		
 		isHeld = true;
@@ -62,6 +65,7 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 	}
 	public void BecomeDropped()
 	{
+		EmitSignal(SignalName.ev_Dropped);
 		moveTimer = 0.0f;
 	}
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -167,8 +171,20 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 				(float)Mathf.Lerp(RotationDegrees.Y, 
 				swayReferenceObject.RotationDegrees.Y + (-sway_mod_vector.Y * 35.0f + (mouseMovement.X * item_anim_data.yWeaponRotation)) * delta, 
 			
-			item_anim_data.yWeaponRotationPosition), Rotation.Z);
+				item_anim_data.yWeaponRotationPosition), Rotation.Z);
 			
+	}
+
+	public void EmitReloadSignal(float reload_time)
+	{
+		EmitSignal(SignalName.ev_Reloaded, reload_time);
+	}
+	public SubViewport GetItemIconViewport()
+	{
+		
+		return itemIconModelViewport;
+		
+		
 	}
 
 	

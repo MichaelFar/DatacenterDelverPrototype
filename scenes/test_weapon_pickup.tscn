@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="5_c6vs4"]
 [ext_resource type="Script" uid="uid://bqi47dvxyyyq" path="res://scripts/CustomResources/WeaponData.cs" id="5_d2e3b"]
 [ext_resource type="PackedScene" uid="uid://j2ftuynwefip" path="res://scenes/ProjectileScenes/projectile.tscn" id="5_k7vxe"]
+[ext_resource type="PackedScene" uid="uid://b3s06s82kcpeh" path="res://scenes/item_icon_subviewport.tscn" id="8_kfx2g"]
 
 [sub_resource type="Resource" id="Resource_3uhrl"]
 script = ExtResource("2_u6lk0")
@@ -25,6 +26,7 @@ radius = 0.21875
 height = 1.1391602
 
 [sub_resource type="Resource" id="Resource_c6vs4"]
+resource_local_to_scene = true
 script = ExtResource("5_d2e3b")
 maxAmmoInMagazine = 30
 weaponSpread = 0.2
@@ -41,12 +43,36 @@ _data = {
 }
 point_count = 4
 
-[node name="WeaponPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea", "swayPath")]
+[sub_resource type="Gradient" id="Gradient_k7vxe"]
+offsets = PackedFloat32Array(0, 0.5206422, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 0.07450981, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k7vxe"]
+gradient = SubResource("Gradient_k7vxe")
+height = 10000
+fill_from = Vector2(0.5068259, 1)
+fill_to = Vector2(0.48976108, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k7vxe"]
+transparency = 1
+albedo_color = Color(1, 0.22352941, 0.25882354, 1)
+albedo_texture = SubResource("GradientTexture2D_k7vxe")
+emission_enabled = true
+emission = Color(4.624679, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wd65j"]
+material = SubResource("StandardMaterial3D_k7vxe")
+top_radius = 0.099121094
+bottom_radius = 0.099121094
+height = 0.7504883
+
+[node name="WeaponPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea", "swayPath", "itemIconModelViewport")]
 collision_layer = 0
 script = ExtResource("1_jd0is")
 itemAnimationData = SubResource("Resource_3uhrl")
 myArea = NodePath("TestItemPickup/InteractArea2")
 swayPath = NodePath("Path3D/PathFollow3D")
+itemIconModelViewport = NodePath("Path3D/PathFollow3D/ItemIconSubviewport")
 
 [node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
 
@@ -57,10 +83,11 @@ interactText = "Weapon Pickup"
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
 shape = SubResource("CapsuleShape3D_al6tu")
 
-[node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369 node_paths=PackedStringArray("firePoint")]
+[node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369 node_paths=PackedStringArray("firePoint", "gunMeshNode")]
 script = ExtResource("5_c6vs4")
 weaponData = SubResource("Resource_c6vs4")
 firePoint = NodePath("../Path3D/PathFollow3D/blasterRotationParent/blasterA2/ProjectileMarker")
+gunMeshNode = NodePath("../Path3D/PathFollow3D/blasterRotationParent/blasterA")
 
 [node name="ShootTimer" type="Timer" parent="WeaponActionHandler" unique_id=1494828202]
 
@@ -76,20 +103,33 @@ use_model_front = true
 loop = false
 
 [node name="blasterRotationParent" parent="Path3D/PathFollow3D" unique_id=1107578817 instance=ExtResource("4_u6lk0")]
-transform = Transform3D(0.06975652, 0, 0.9975639, 0, 1, 0, -0.9975643, 0, 0.06975649, -0.363, -0.13, -0.06)
+transform = Transform3D(0.078459114, 0, 0.9969174, 0, 1.0000002, 0, -0.99691767, 0, 0.07845909, -0.368, -0.13, 0)
 
 [node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent" index="0" unique_id=640299026]
 visible = false
 mesh = null
 
 [node name="blasterA2" parent="Path3D/PathFollow3D/blasterRotationParent" unique_id=475662952 instance=ExtResource("4_u6lk0")]
-transform = Transform3D(1, -1.3853186e-13, 2.842171e-14, -1.28543425e-14, 1, 0, 2.842171e-14, 7.1054274e-15, 1, 0, 0, 0)
+transform = Transform3D(1, -1.3853186e-13, -4.656613e-10, -1.28543425e-14, 1, 0, 0, 7.105428e-15, 1.0000001, 0.055793058, 0.019126043, 0.044789255)
 
 [node name="ProjectileMarker" type="Marker3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=1012188796]
 transform = Transform3D(0.9999999, -5.820766e-11, -9.313226e-10, -1.4551915e-11, 1, 0, 4.656613e-10, -7.450581e-09, 1, 0.0018125176, 0.10823766, -0.45437044)
 
+[node name="LaserMesh" type="MeshInstance3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=1857109279]
+transform = Transform3D(0.06806291, 0.0044768057, 1.181812e-11, 8.7490414e-16, -4.371207e-08, 0.060351063, 0.0003049103, -1.0000443, -2.6381048e-09, 0.043046597, 0.097219534, -0.7353729)
+mesh = SubResource("CylinderMesh_wd65j")
+
+[node name="ItemIconSubviewport" parent="Path3D/PathFollow3D" unique_id=17097608 instance=ExtResource("8_kfx2g")]
+
+[node name="CameraRotationParent" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" parent_id_path=PackedInt32Array(17097608, 1894404040) index="0" unique_id=1541443980 node_paths=PackedStringArray("nodeToFollow")]
+nodeToFollow = NodePath("../../../blasterRotationParent/blasterA2/blasterA")
+
+[connection signal="ev_Dropped" from="." to="WeaponActionHandler" method="SetIsHeld" binds= [false]]
+[connection signal="ev_PickedUp" from="." to="WeaponActionHandler" method="SetIsHeld" binds= [true]]
 [connection signal="ev_ProcessInput" from="." to="WeaponActionHandler" method="ProcessInput"]
 [connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]
 [connection signal="ev_RecoilPresent" from="WeaponActionHandler" to="." method="SetSwayMods"]
 
 [editable path="Path3D/PathFollow3D/blasterRotationParent"]
+[editable path="Path3D/PathFollow3D/blasterRotationParent/blasterA2"]
+[editable path="Path3D/PathFollow3D/ItemIconSubviewport"]
