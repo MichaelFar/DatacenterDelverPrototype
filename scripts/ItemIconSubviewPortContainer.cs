@@ -28,10 +28,22 @@ public partial class ItemIconSubviewPortContainer : SubViewportContainer
 					itemSubviewportParent = item_icon_viewport.GetParent();
 					item_icon_viewport.Reparent(this);
 					item_icon_viewport.ShowIconMesh();
-					potential_pickup.ev_Dropped += () => {item_icon_viewport.Reparent(itemSubviewportParent);item_icon_viewport.HideIconMesh();};
+					Action reparent_lambda = () => ReparentBackToOriginalItem(item_icon_viewport);
+					potential_pickup.ev_Dropped += ReparentBackToOriginalItem(item_icon_viewport);
 				}
+			}
+			else
+			{
+				
 			}
 				
 		}
+
 	}
+	private void ReparentBackToOriginalItem(ItemIconViewport item_icon_viewport)
+	{
+		item_icon_viewport.Reparent(itemSubviewportParent);
+		item_icon_viewport.HideIconMesh();
+	}
+	
 }

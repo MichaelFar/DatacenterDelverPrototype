@@ -8,7 +8,8 @@
 [ext_resource type="Script" uid="uid://bqi47dvxyyyq" path="res://scripts/CustomResources/WeaponData.cs" id="6_pus3f"]
 [ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/WeaponModels/blasterA.fbx" id="7_o1lve"]
 [ext_resource type="PackedScene" uid="uid://dcu0mbd3amof1" path="res://ModelDump/WeaponModels/blasterB.fbx" id="8_ha58e"]
-[ext_resource type="PackedScene" uid="uid://b3s06s82kcpeh" path="res://scenes/item_icon_subviewport.tscn" id="9_hx0rm"]
+[ext_resource type="Script" uid="uid://cm73sqrdlr0y3" path="res://scripts/ItemIconViewport.cs" id="9_uvqd3"]
+[ext_resource type="Script" uid="uid://c8jdsr1n6bfxk" path="res://scripts/CameraRotationParent.cs" id="10_6csmp"]
 
 [sub_resource type="Resource" id="Resource_3uhrl"]
 script = ExtResource("2_ha58e")
@@ -308,16 +309,34 @@ mesh = SubResource("CylinderMesh_hx0rm")
 [node name="ProjectileMarker" type="Marker3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterB" unique_id=1012188796]
 transform = Transform3D(0.9999578, -9.169564e-11, 0.0044764197, -1.4564542e-11, 0.9999844, 1.1971352e-23, -0.0044795414, -7.4498336e-09, 0.9999358, 0.004237527, 0.050849937, -0.21000007)
 
-[node name="ItemIconSubviewport" parent="Path3D/PathFollow3D" unique_id=17097608 instance=ExtResource("9_hx0rm")]
+[node name="ItemIconSubviewport" type="SubViewport" parent="Path3D/PathFollow3D" unique_id=17097608 node_paths=PackedStringArray("iconMeshNode")]
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+script = ExtResource("9_uvqd3")
+iconMeshNode = NodePath("IconParent/IconMesh")
 meshOverride = SubResource("ArrayMesh_uvqd3")
 
-[node name="CameraRotationParent" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" parent_id_path=PackedInt32Array(17097608, 1894404040) index="0" unique_id=1541443980 node_paths=PackedStringArray("nodeToFollow")]
+[node name="IconParent" type="Node3D" parent="Path3D/PathFollow3D/ItemIconSubviewport" unique_id=1894404040]
+
+[node name="CameraRotationParent" type="Node3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" unique_id=1541443980 node_paths=PackedStringArray("nodeToFollow", "iconParent")]
+transform = Transform3D(0.2636262, 0, -0.9645917, 0, 0.9999846, 0, 0.9645698, 0, 0.26362363, 0, 0.05540353, 0.006794095)
+script = ExtResource("10_6csmp")
 nodeToFollow = NodePath("../../../blasterRotationParent/blasterB/blasterB")
+iconParent = NodePath("..")
 
-[node name="ViewPortItemView" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" index="0" unique_id=147503626]
-transform = Transform3D(0.7742548, -0.5688167, -0.2776391, 0.5895596, 0.807674, -0.010622319, 0.23028217, -0.15545952, 0.9606602, -0.10043118, -0.0076404214, 0.34137866)
+[node name="ViewPortItemView" type="Camera3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=147503626]
+transform = Transform3D(0.7742548, -0.5688168, -0.2776391, 0.5895596, 0.80767405, -0.010622331, 0.23028217, -0.15545952, 0.9606603, -0.17179964, -0.0076404214, 0.602508)
+cull_mask = 2
+fov = 51.02868
 
-[node name="IconMesh" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" parent_id_path=PackedInt32Array(17097608, 1894404040) index="1" unique_id=1155156152]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=1060683210]
+transform = Transform3D(0.94335896, 0, -0.33192694, 0, 1.0000154, 0, 0.3319424, 0, 0.943337, -0.006554092, -0.055404384, -0.0017912553)
+layers = 2
+light_energy = 0.42
+
+[node name="IconMesh" type="MeshInstance3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" unique_id=1155156152]
+layers = 2
 mesh = SubResource("ArrayMesh_hx0rm")
 
 [connection signal="ev_Dropped" from="." to="WeaponActionHandler" method="SetIsHeld" binds= [false]]
@@ -328,4 +347,3 @@ mesh = SubResource("ArrayMesh_hx0rm")
 
 [editable path="Path3D/PathFollow3D/blasterRotationParent"]
 [editable path="Path3D/PathFollow3D/blasterRotationParent/blasterB"]
-[editable path="Path3D/PathFollow3D/ItemIconSubviewport"]

@@ -76,6 +76,7 @@ xWeaponRotationPosition = 0.2
 metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
 
 [sub_resource type="Resource" id="Resource_62he0"]
+resource_local_to_scene = true
 script = ExtResource("4_if42a")
 yWeaponSway = 0.1
 xWeaponSway = 0.2
