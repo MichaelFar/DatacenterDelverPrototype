@@ -261,12 +261,15 @@ mesh = SubResource("CylinderMesh_nshci")
 [node name="ProjectileMarker" type="Marker3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=1012188796]
 transform = Transform3D(0.9999999, -5.820766e-11, -9.313226e-10, -1.4551915e-11, 1, 0, 4.656613e-10, -7.450581e-09, 1, 0.0018125176, 0.10823766, -0.45437044)
 
-[node name="ItemIconSubviewport" type="SubViewport" parent="Path3D/PathFollow3D" unique_id=17097608 node_paths=PackedStringArray("iconMeshNode")]
+[node name="ItemIconSubviewport" type="SubViewport" parent="Path3D/PathFollow3D" unique_id=17097608 node_paths=PackedStringArray("iconMeshNode", "renderLight", "renderCamera")]
 transparent_bg = true
 handle_input_locally = false
 gui_disable_input = true
 script = ExtResource("8_ch0e1")
 iconMeshNode = NodePath("IconParent/IconMesh")
+renderLight = NodePath("IconParent/CameraRotationParent/DirectionalLight3D")
+renderCamera = NodePath("IconParent/CameraRotationParent/ViewPortItemView")
+render_layer = 2
 
 [node name="IconParent" type="Node3D" parent="Path3D/PathFollow3D/ItemIconSubviewport" unique_id=1894404040]
 
