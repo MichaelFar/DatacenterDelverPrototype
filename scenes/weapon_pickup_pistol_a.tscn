@@ -347,6 +347,7 @@ mesh = SubResource("ArrayMesh_hx0rm")
 [connection signal="ev_ProcessInput" from="." to="WeaponActionHandler" method="ProcessInput"]
 [connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]
 [connection signal="ev_RecoilPresent" from="WeaponActionHandler" to="." method="SetSwayMods"]
+[connection signal="ready" from="WeaponActionHandler" to="." method="SetIsWeapon" binds= [true]]
 
 [editable path="Path3D/PathFollow3D/blasterRotationParent"]
 [editable path="Path3D/PathFollow3D/blasterRotationParent/blasterB"]

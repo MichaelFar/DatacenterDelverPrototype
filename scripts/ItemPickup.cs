@@ -37,6 +37,8 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 	private Vector2 swayModVector = Vector2.Zero;
 	private float swayModVectorMagnitude = 0.0f;
 	private float deltaCoefficient = 1.0f;
+
+	private bool isWeapon = false;
 	public override void _Ready()
 	{
 		if(swayPath != null)
@@ -49,6 +51,15 @@ public partial class ItemPickup : RigidBody3D, IUseItem
 		//InitializeGlobalValues();
 	}
 	
+	public void SetIsWeapon(bool new_value)
+	{
+		isWeapon = new_value;
+	}
+	public bool GetIsWeapon()
+	{
+		return isWeapon;
+	}
+
 	public void InitializeGlobalValues()
     {
         

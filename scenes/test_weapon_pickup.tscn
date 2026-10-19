@@ -30,7 +30,7 @@ height = 1.1391602
 resource_local_to_scene = true
 script = ExtResource("5_d2e3b")
 maxAmmoInMagazine = 30
-weaponSpread = 0.2
+weaponSpread = 0.1
 projectileScene = ExtResource("5_k7vxe")
 fireMode = 0
 fireCooldown = 0.05
@@ -244,13 +244,12 @@ transform = Transform3D(0.9999999, -5.820766e-11, -9.313226e-10, -1.4551915e-11,
 transform = Transform3D(0.06806291, 0.0044768057, 1.181812e-11, 8.7490414e-16, -4.371207e-08, 0.060351063, 0.0003049103, -1.0000443, -2.6381048e-09, 0.043046597, 0.097219534, -0.7353729)
 mesh = SubResource("CylinderMesh_wd65j")
 
-[node name="ItemIconSubviewport" type="SubViewport" parent="Path3D/PathFollow3D" unique_id=17097608 node_paths=PackedStringArray("iconMeshNode", "renderLight", "renderCamera")]
+[node name="ItemIconSubviewport" type="SubViewport" parent="Path3D/PathFollow3D" unique_id=17097608 node_paths=PackedStringArray("iconMeshNode", "renderCamera")]
 transparent_bg = true
 handle_input_locally = false
 gui_disable_input = true
 script = ExtResource("8_8faqx")
 iconMeshNode = NodePath("IconParent/IconMesh")
-renderLight = NodePath("IconParent/CameraRotationParent/DirectionalLight3D")
 renderCamera = NodePath("IconParent/CameraRotationParent/ViewPortItemView")
 render_layer = 2
 
@@ -267,10 +266,15 @@ transform = Transform3D(0.7742548, -0.5688168, -0.27763912, 0.5895596, 0.8076740
 cull_mask = 2
 fov = 51.06865
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=1060683210]
-transform = Transform3D(0.94335896, 0, -0.33192694, 0, 1.0000154, 0, 0.3319424, 0, 0.943337, -0.006554092, -0.055404384, -0.0017912553)
-layers = 2
-light_energy = 0.42
+[node name="OmniLight3D" type="OmniLight3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=1853610463]
+transform = Transform3D(1.0000532, 0, 8.255243e-06, 0, 1.0000154, 0, 0, 0, 1.0000329, -0.35722458, 0, 1.3070455)
+layers = 6
+light_energy = 0.544
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=1176051432]
+transform = Transform3D(1.0000532, 0, 8.255243e-06, 0, 1.0000154, 0, 0, 0, 1.0000329, 0.3215239, 0, -1.1764206)
+layers = 6
+light_energy = 0.544
 
 [node name="IconMesh" type="MeshInstance3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" unique_id=1155156152]
 layers = 2

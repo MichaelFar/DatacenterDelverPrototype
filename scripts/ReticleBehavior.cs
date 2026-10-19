@@ -15,4 +15,9 @@ public partial class ReticleBehavior : TextureRect
 	{
 		Position = new Vector2(Position.X, Mathf.Lerp(Position.Y, initialPosition.Y, (float)delta));
 	}
+
+	public void SetNewPosition(Vector2 new_direction_from_center, float magnitude)
+	{
+		Position = new_direction_from_center.Normalized() * magnitude;
+	}
 }

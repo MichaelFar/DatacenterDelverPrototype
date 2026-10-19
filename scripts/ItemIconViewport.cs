@@ -28,7 +28,12 @@ public partial class ItemIconViewport : SubViewport
 	{
 		renderCamera.CullMask = new_layer;
 		iconMeshNode.Layers = new_layer;
-		renderLight.Layers = new_layer;
+		if(renderLight != null)
+		{
+			renderLight.Layers = new_layer;
+			renderLight.LightCullMask = new_layer;
+		}
+			
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
