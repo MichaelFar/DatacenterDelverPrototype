@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://c7aq0wp5qc4wc"]
+
+[ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="2_8xfx7"]
+[ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="4_mn8o7"]
+[ext_resource type="PackedScene" uid="uid://cqtuaxr8ibaw0" path="res://scenes/watercan_weapon_pickup.tscn" id="4_weq04"]
+[ext_resource type="PackedScene" uid="uid://dap413kmaksqt" path="res://scenes/farm_plot.tscn" id="5_y421y"]
+[ext_resource type="PackedScene" uid="uid://b7unqlks80gkb" path="res://scenes/pda_item_pickup.tscn" id="9_leb6c"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kv4ol"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_t522a"]
+sky_material = SubResource("ProceduralSkyMaterial_kv4ol")
+
+[sub_resource type="Environment" id="Environment_vma0u"]
+background_mode = 2
+sky = SubResource("Sky_t522a")
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wd65j"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kv4ol"]
+albedo_color = Color(0.39232534, 0.39232537, 0.39232534, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4u6lx"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3uhrl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_al6tu"]
+size = Vector3(0.9902191, 1.0892792, 1.1315918)
+
+[sub_resource type="Resource" id="Resource_1icwl"]
+resource_local_to_scene = true
+script = ExtResource("4_mn8o7")
+yWeaponSway = 0.1
+xWeaponSway = 0.2
+yWeaponSwayPosition = 0.2
+xWeaponSwayPosition = 0.3
+yWeaponRotation = 17.9
+xWeaponRotation = 19.2
+yWeaponRotationPosition = 0.2
+xWeaponRotationPosition = 0.2
+itemType = 1
+metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
+
+[node name="DebugScene" type="Node3D" unique_id=390269057]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1191665713]
+environment = SubResource("Environment_vma0u")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1260567417]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1915202862]
+transform = Transform3D(28.515469, 0, 0, 0, 0.99999964, 0, 0, 0, 29.948793, 0, 0.015571117, 0)
+mesh = SubResource("PlaneMesh_wd65j")
+surface_material_override/0 = SubResource("StandardMaterial3D_kv4ol")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor" unique_id=1606280589]
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D" unique_id=406399665]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("ConcavePolygonShape3D_4u6lx")
+
+[node name="ProtoController" parent="." unique_id=2104272099 instance=ExtResource("2_8xfx7")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.64690614, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1236685703]
+transform = Transform3D(44.05781, 0, 0, 0, 12.824832, 0, 0, 0, 1, -3.6363616, 6.81527, 24.738106)
+mesh = SubResource("BoxMesh_3uhrl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=906697901]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=1064686259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00014843792, -0.024314463, 0.0657959)
+shape = SubResource("BoxShape3D_al6tu")
+
+[node name="PDAItemPickup" parent="." unique_id=243064498 instance=ExtResource("9_leb6c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5332303, 0.3336258, -5.4051127)
+itemAnimationData = SubResource("Resource_1icwl")
+
+[node name="WatercanPickup" parent="." unique_id=1684707487 instance=ExtResource("4_weq04")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.877672, 1.4997554, 0.15040493)
+
+[node name="FarmPlot" parent="." unique_id=902285986 instance=ExtResource("5_y421y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.501172, 0.18034011, -4.395318)

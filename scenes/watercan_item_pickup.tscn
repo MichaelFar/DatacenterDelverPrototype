@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://bkb35yl573s2p"]
+
+[ext_resource type="Script" uid="uid://d2hjcousisg1r" path="res://scripts/ItemPickup.cs" id="1_3bl20"]
+[ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="2_o7xg0"]
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_w4jxv"]
+
+[sub_resource type="Resource" id="Resource_3uhrl"]
+script = ExtResource("2_o7xg0")
+yWeaponSway = 0.1
+xWeaponSway = 0.2
+yWeaponSwayPosition = 0.2
+xWeaponSwayPosition = 0.3
+yWeaponRotation = 17.9
+xWeaponRotation = 19.2
+yWeaponRotationPosition = 0.2
+xWeaponRotationPosition = 0.2
+metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_al6tu"]
+top_radius = 0.001
+bottom_radius = 0.501
+height = 0.83935547
+
+[sub_resource type="BoxMesh" id="BoxMesh_3uhrl"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wd65j"]
+top_radius = 0.255
+
+[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
+size = Vector3(0.17434692, 0.18457031, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
+radius = 0.21875
+height = 1.1391602
+
+[node name="ItemPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea")]
+collision_layer = 0
+script = ExtResource("1_3bl20")
+itemAnimationData = SubResource("Resource_3uhrl")
+myArea = NodePath("TestItemPickup/InteractArea2")
+
+[node name="MeshSpout" type="MeshInstance3D" parent="." unique_id=91897931]
+transform = Transform3D(0.263, 0, 0, 0, -6.6878423e-09, -0.252, 0, 0.153, -1.101527e-08, 0, 0.22666004, -1.0449538)
+mesh = SubResource("CylinderMesh_al6tu")
+
+[node name="MeshStem" type="MeshInstance3D" parent="." unique_id=1025227717]
+transform = Transform3D(0.07442628, 0, 0, 0, 0.057485275, -0.26162872, 0, 0.03318914, 0.45315424, 0, 0.10916877, -0.8365952)
+mesh = SubResource("BoxMesh_3uhrl")
+
+[node name="MeshBody" type="MeshInstance3D" parent="." unique_id=1200275561]
+transform = Transform3D(0.53429997, 0, 0, 0, 0.16754639, 0, 0, 0, 0.85578275, 0, 0, -0.3493083)
+mesh = SubResource("CylinderMesh_wd65j")
+
+[node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
+
+[node name="InteractArea2" parent="TestItemPickup" unique_id=1263587914 instance=ExtResource("3_w4jxv")]
+interactText = "Pickup Item"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestItemPickup" unique_id=1702630979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.47469497)
+visible = false
+mesh = SubResource("BoxMesh_al6tu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=882061266]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
+shape = SubResource("CapsuleShape3D_al6tu")
+
+[connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]

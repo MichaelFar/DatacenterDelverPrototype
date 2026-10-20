@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://lx62uuhn44aq"]
 
-[ext_resource type="Script" uid="uid://dcmab2jajog3m" path="res://scenes/LevelScenes/InteractionArea.cs" id="1_q06jp"]
+[ext_resource type="Script" uid="uid://dcmab2jajog3m" path="res://scripts/InteractionArea.cs" id="1_q06jp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
 resource_local_to_scene = true

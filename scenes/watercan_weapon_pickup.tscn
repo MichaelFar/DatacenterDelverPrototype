@@ -1,0 +1,179 @@
+[gd_scene format=3 uid="uid://cqtuaxr8ibaw0"]
+
+[ext_resource type="Script" uid="uid://d2hjcousisg1r" path="res://scripts/ItemPickup.cs" id="1_2ijg6"]
+[ext_resource type="Script" uid="uid://bbyky0w4vg3wj" path="res://scripts/CustomResources/ItemAnimationData.cs" id="2_m13y6"]
+[ext_resource type="PackedScene" uid="uid://lx62uuhn44aq" path="res://scenes/utility_scenes/interact_area.tscn" id="3_wvghe"]
+[ext_resource type="Script" uid="uid://chcm0vhenprdb" path="res://scripts/WeaponActionHandler.cs" id="4_eqpdd"]
+[ext_resource type="PackedScene" uid="uid://bn2yknloe6fom" path="res://scenes/ProjectileScenes/watercan_projectile.tscn" id="5_2ijg6"]
+[ext_resource type="Script" uid="uid://bqi47dvxyyyq" path="res://scripts/CustomResources/WeaponData.cs" id="6_xmnk7"]
+[ext_resource type="PackedScene" uid="uid://dy2un1ut5beqp" path="res://ModelDump/WeaponModels/blasterA.fbx" id="7_0g5sr"]
+[ext_resource type="Script" uid="uid://cm73sqrdlr0y3" path="res://scripts/ItemIconViewport.cs" id="8_isiwi"]
+[ext_resource type="Script" uid="uid://c8jdsr1n6bfxk" path="res://scripts/CameraRotationParent.cs" id="9_o3df8"]
+
+[sub_resource type="Resource" id="Resource_3uhrl"]
+script = ExtResource("2_m13y6")
+yWeaponSway = 0.1
+xWeaponSway = 0.2
+yWeaponSwayPosition = 0.2
+xWeaponSwayPosition = 0.3
+yWeaponRotation = 17.9
+xWeaponRotation = 19.2
+yWeaponRotationPosition = 0.2
+xWeaponRotationPosition = 0.2
+metadata/_custom_type_script = "uid://bbyky0w4vg3wj"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
+radius = 0.21875
+height = 1.1391602
+
+[sub_resource type="Resource" id="Resource_c6vs4"]
+resource_local_to_scene = true
+script = ExtResource("6_xmnk7")
+weaponSpread = 1.0
+projectileScene = ExtResource("5_2ijg6")
+fireMode = 0
+fireCooldown = 0.05
+recoil = 2.0
+isInfinite = true
+metadata/_custom_type_script = "uid://bqi47dvxyyyq"
+
+[sub_resource type="Curve3D" id="Curve3D_c6vs4"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.10805938, 0.064083815, -0.04349017, 0, 0, 0, 0, 0, 0, -0.08748575, 0.014078289, -0.046651006, 0, 0, 0, 0, 0, 0, 0.030004755, 0.01421079, -0.05531921, 0, 0, 0, 0, 0, 0, 0.13257314, 0.08192259, -0.051409055),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2ijg6"]
+top_radius = 0.001
+bottom_radius = 0.501
+height = 0.83935547
+
+[sub_resource type="BoxMesh" id="BoxMesh_m13y6"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wvghe"]
+top_radius = 0.255
+
+[node name="WatercanPickup" type="RigidBody3D" unique_id=1684707487 node_paths=PackedStringArray("myArea", "swayPath", "itemIconModelViewport")]
+collision_layer = 0
+script = ExtResource("1_2ijg6")
+itemAnimationData = SubResource("Resource_3uhrl")
+myArea = NodePath("TestItemPickup/InteractArea2")
+swayPath = NodePath("Path3D/PathFollow3D")
+itemIconModelViewport = NodePath("Path3D/PathFollow3D/ItemIconSubviewport")
+
+[node name="TestItemPickup" type="MeshInstance3D" parent="." unique_id=2064928318]
+
+[node name="InteractArea2" parent="TestItemPickup" unique_id=1263587914 instance=ExtResource("3_wvghe")]
+interactText = "Watercan"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=882061266]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.43041992)
+shape = SubResource("CapsuleShape3D_al6tu")
+
+[node name="WeaponActionHandler" type="Node3D" parent="." unique_id=217667369 node_paths=PackedStringArray("firePoint", "gunMeshNode")]
+script = ExtResource("4_eqpdd")
+weaponData = SubResource("Resource_c6vs4")
+firePoint = NodePath("../Path3D/PathFollow3D/blasterRotationParent/blasterA2/ProjectileMarker")
+gunMeshNode = NodePath("../Path3D/PathFollow3D/blasterRotationParent/blasterA")
+
+[node name="ShootTimer" type="Timer" parent="WeaponActionHandler" unique_id=1494828202]
+
+[node name="Path3D" type="Path3D" parent="." unique_id=812425801]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+curve = SubResource("Curve3D_c6vs4")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D" unique_id=289844958]
+transform = Transform3D(-0.07421897, 0, 0.99720955, 0, 0.9999844, 0, -0.9971878, 0, -0.07422059, 0.028143004, 0.013654119, -0.055275064)
+progress = 0.17
+rotation_mode = 1
+use_model_front = true
+loop = false
+
+[node name="blasterRotationParent" parent="Path3D/PathFollow3D" unique_id=1107578817 instance=ExtResource("7_0g5sr")]
+transform = Transform3D(0.078459114, 0, 0.9969174, 0, 1.0000002, 0, -0.99691767, 0, 0.07845909, -0.368, -0.13, 0)
+
+[node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent" index="0" unique_id=640299026]
+visible = false
+mesh = null
+
+[node name="blasterA2" parent="Path3D/PathFollow3D/blasterRotationParent" unique_id=475662952 instance=ExtResource("7_0g5sr")]
+transform = Transform3D(1, -1.3853186e-13, -4.656613e-10, -1.28543425e-14, 1, 0, 0, 7.105428e-15, 1.0000001, 0.055793058, 0.019126043, 0.044789255)
+
+[node name="blasterA" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" index="0" unique_id=640299026]
+visible = false
+
+[node name="ProjectileMarker" type="Marker3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=1012188796]
+transform = Transform3D(0.9999999, -5.8207675e-11, 0, -1.4551915e-11, 1, 9.926167e-24, 4.656613e-10, -7.4505793e-09, 0.9999999, -0.00012160954, 0.21731797, -0.90945315)
+
+[node name="MeshSpout" type="MeshInstance3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=246345276]
+transform = Transform3D(0.263, 5.820766e-11, -3.469447e-18, 3.1484562e-23, -6.6878423e-09, -0.252, -2.3283064e-10, 0.15299998, -1.1015269e-08, 0.0013302257, 0.22666004, -0.7319634)
+mesh = SubResource("CylinderMesh_2ijg6")
+
+[node name="MeshStem" type="MeshInstance3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=1861536581]
+transform = Transform3D(0.07442628, 0, 1.1641532e-10, -9.6752667e-23, 0.057485275, -0.26162872, -2.910383e-11, 0.033189137, 0.4531542, 0.0013302257, 0.109168775, -0.5236048)
+mesh = SubResource("BoxMesh_m13y6")
+
+[node name="MeshBody" type="MeshInstance3D" parent="Path3D/PathFollow3D/blasterRotationParent/blasterA2" unique_id=2071017533]
+transform = Transform3D(0.53429997, -1.1154531e-21, 4.656613e-10, -1.2896263e-22, 0.16754639, 3.3087225e-24, -2.3283064e-10, 0, 0.8557827, 0.0013302255, 0, -0.036318004)
+mesh = SubResource("CylinderMesh_wvghe")
+
+[node name="ItemIconSubviewport" type="SubViewport" parent="Path3D/PathFollow3D" unique_id=17097608 node_paths=PackedStringArray("iconMeshNode", "renderCamera")]
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+script = ExtResource("8_isiwi")
+iconMeshNode = NodePath("IconParent/IconMesh")
+renderCamera = NodePath("IconParent/CameraRotationParent/ViewPortItemView")
+render_layer = 2
+
+[node name="IconParent" type="Node3D" parent="Path3D/PathFollow3D/ItemIconSubviewport" unique_id=1894404040]
+
+[node name="CameraRotationParent" type="Node3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" unique_id=1541443980 node_paths=PackedStringArray("nodeToFollow", "iconParent")]
+transform = Transform3D(0.26362625, 0, -0.9645894, 0, 0.9999846, 0, 0.9645698, 0, 0.2636316, 0, 0.05540353, 0.006794095)
+script = ExtResource("9_o3df8")
+nodeToFollow = NodePath("../../../blasterRotationParent/blasterA2/blasterA")
+iconParent = NodePath("..")
+
+[node name="ViewPortItemView" type="Camera3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=147503626]
+transform = Transform3D(0.77425367, -0.5688147, -0.27764633, 0.5895588, 0.8076747, -0.010622307, 0.23028183, -0.15545893, 0.9606604, -0.60705155, -0.0076404214, 1.5366102)
+cull_mask = 2
+fov = 51.06865
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=1853610463]
+transform = Transform3D(1.0000532, 0, 8.255243e-06, 0, 1.0000154, 0, 0, 0, 1.0000329, -0.35722458, 0, 1.3070455)
+layers = 6
+light_energy = 0.544
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/CameraRotationParent" unique_id=1176051432]
+transform = Transform3D(1.0000532, 0, 8.255243e-06, 0, 1.0000154, 0, 0, 0, 1.0000329, 0.3215239, 0, -1.1764206)
+layers = 6
+light_energy = 0.544
+
+[node name="IconMesh" type="MeshInstance3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent" unique_id=1155156152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.36262202)
+layers = 2
+
+[node name="MeshSpout" type="MeshInstance3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/IconMesh" unique_id=673361808]
+transform = Transform3D(0.263, 0, 0, 0, -6.6878423e-09, -0.252, 0, 0.153, -1.101527e-08, 0, 0.22666004, -1.0449538)
+layers = 2
+mesh = SubResource("CylinderMesh_2ijg6")
+
+[node name="MeshStem" type="MeshInstance3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/IconMesh" unique_id=1112691475]
+transform = Transform3D(0.07442628, 0, 0, 0, 0.057485275, -0.26162872, 0, 0.03318914, 0.45315424, 0, 0.10916877, -0.8365952)
+layers = 2
+mesh = SubResource("BoxMesh_m13y6")
+
+[node name="MeshBody" type="MeshInstance3D" parent="Path3D/PathFollow3D/ItemIconSubviewport/IconParent/IconMesh" unique_id=788223346]
+transform = Transform3D(0.53429997, 0, 0, 0, 0.16754639, 0, 0, 0, 0.85578275, 0, 0, -0.3493083)
+layers = 2
+mesh = SubResource("CylinderMesh_wvghe")
+
+[connection signal="ev_Dropped" from="." to="WeaponActionHandler" method="SetIsHeld" binds= [false]]
+[connection signal="ev_PickedUp" from="." to="WeaponActionHandler" method="SetIsHeld" binds= [true]]
+[connection signal="ev_ProcessInput" from="." to="WeaponActionHandler" method="ProcessInput"]
+[connection signal="ev_OnInteract" from="TestItemPickup/InteractArea2" to="TestItemPickup/InteractArea2" method="SetCanInteractToFalse"]
+[connection signal="ev_RecoilPresent" from="WeaponActionHandler" to="." method="SetSwayMods"]
+
+[editable path="Path3D/PathFollow3D/blasterRotationParent"]
+[editable path="Path3D/PathFollow3D/blasterRotationParent/blasterA2"]

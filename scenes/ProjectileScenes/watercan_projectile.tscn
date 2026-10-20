@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bn2yknloe6fom"]
+
+[ext_resource type="Script" uid="uid://scgmniu3vq31" path="res://scripts/Projectile.cs" id="1_8stto"]
+[ext_resource type="PackedScene" uid="uid://c7obvl78furi7" path="res://scenes/utility_scenes/plot_interaction_volume.tscn" id="2_p7iqa"]
+[ext_resource type="Script" uid="uid://k3uqa45pjhse" path="res://scripts/WateringHandler.cs" id="3_g4bg2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_al6tu"]
+margin = 4.298
+radius = 0.086297974
+height = 0.34328425
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q1jpp"]
+resource_local_to_scene = true
+transparency = 1
+albedo_color = Color(0.23137255, 0.24313726, 1, 0.5294118)
+emission_enabled = true
+emission = Color(0, 0.5568628, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_p7iqa"]
+material = SubResource("StandardMaterial3D_q1jpp")
+
+[node name="Watercan_Projectile" type="RigidBody3D" unique_id=5267562 node_paths=PackedStringArray("lifeTimeTimer", "projectileMesh", "collider")]
+collision_layer = 4
+collision_mask = 2
+collision_priority = 200.0
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 10
+script = ExtResource("1_8stto")
+forceMagnitude = 3.0
+lifeTimeTimer = NodePath("Timer")
+projectileMesh = NodePath("MeshInstance3D")
+collider = NodePath("CollisionShape3D")
+damage = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1623724696]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -6.3662142e-09, 0.019388735)
+shape = SubResource("CapsuleShape3D_al6tu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2082028297]
+transform = Transform3D(0.185, 0, 0, 0, -8.086607e-09, -0.185, 0, 0.185, -8.086607e-09, 0, 0, 0)
+mesh = SubResource("SphereMesh_p7iqa")
+
+[node name="Timer" type="Timer" parent="." unique_id=50298078]
+
+[node name="PlotInteractionVolume" parent="." unique_id=846891572 instance=ExtResource("2_p7iqa")]
+
+[node name="WateringObject" type="Node3D" parent="." unique_id=652541149]
+script = ExtResource("3_g4bg2")
+
+[connection signal="body_entered" from="." to="." method="DamageOther"]
+[connection signal="ev_EncounteredPlot" from="PlotInteractionVolume" to="WateringObject" method="WaterPlot"]
+[connection signal="ev_PlotInteracted" from="PlotInteractionVolume" to="." method="SetEnableProjectile" binds= [false]]

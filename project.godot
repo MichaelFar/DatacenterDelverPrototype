@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="DatacenterDelver"
-run/main_scene="uid://dgv6jvtyishja"
+run/main_scene="uid://c7aq0wp5qc4wc"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

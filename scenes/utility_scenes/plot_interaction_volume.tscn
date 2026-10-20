@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c7obvl78furi7"]
+
+[ext_resource type="Script" uid="uid://gqy6paxkl0ao" path="res://scripts/PlotInteractionVolume.cs" id="1_jdm7l"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_al6tu"]
+radius = 0.1073537
+
+[node name="PlotInteractionVolume" type="Area3D" unique_id=846891572]
+script = ExtResource("1_jdm7l")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2063292299]
+shape = SubResource("SphereShape3D_al6tu")

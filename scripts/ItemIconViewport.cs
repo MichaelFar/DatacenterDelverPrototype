@@ -28,6 +28,15 @@ public partial class ItemIconViewport : SubViewport
 	{
 		renderCamera.CullMask = new_layer;
 		iconMeshNode.Layers = new_layer;
+		foreach(Node i in iconMeshNode.GetChildren())
+		{
+			MeshInstance3D mesh_child = i as MeshInstance3D;
+
+			if(mesh_child != null)
+			{
+				mesh_child.Layers = new_layer;
+			}
+		}
 		if(renderLight != null)
 		{
 			renderLight.Layers = new_layer;

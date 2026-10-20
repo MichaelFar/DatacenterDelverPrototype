@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dap413kmaksqt"]
+
+[ext_resource type="Script" uid="uid://dlqm5prowlwlu" path="res://scripts/FarmPlot.cs" id="1_nnlth"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nnlth"]
+albedo_color = Color(0.37819237, 0.26360637, 0.19256306, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3uhrl"]
+size = Vector3(4.32428, 2.9236755, 4.5197754)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y421y"]
+albedo_color = Color(0.684914, 0.49087796, 0.3696054, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_al6tu"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_y421y")
+size = Vector3(1, 0.5574951, 1)
+
+[node name="FarmPlot" type="Area3D" unique_id=902285986 node_paths=PackedStringArray("plotMesh")]
+script = ExtResource("1_nnlth")
+wateredMaterial = SubResource("StandardMaterial3D_nnlth")
+plotMesh = NodePath("MeshInstance3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1862910954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015716553, 0.763443, -0.041625977)
+shape = SubResource("BoxShape3D_3uhrl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1867217849]
+transform = Transform3D(3.7236226, 0, 0, 0, 1, 0, 0, 0, 4.0882583, 0, -0.22125244, 0)
+mesh = SubResource("BoxMesh_al6tu")
+
+[connection signal="area_entered" from="." to="." method="ProcessPlotInteractObject"]

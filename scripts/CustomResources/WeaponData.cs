@@ -18,6 +18,8 @@ public partial class WeaponData : Resource
 
     [Export] public CurveTexture recoilCurve;
 
+    [Export] public bool isInfinite = false;
+
     
     public enum e_FireType {Automatic, Semiautomatic};
 }

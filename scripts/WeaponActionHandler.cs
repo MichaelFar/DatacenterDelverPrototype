@@ -134,7 +134,7 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 
     public bool CanShoot()
     {
-        if(weaponData.currentAmmoInMagazine > 0)
+        if(weaponData.currentAmmoInMagazine > 0 || weaponData.isInfinite)
 		{
 			return true;
 		}
@@ -148,7 +148,15 @@ public partial class WeaponActionHandler : Node3D, IWeaponBehavior
 		hasFired = true;
 		Vector2 rand_direction = new Vector2(rand_obj.RandfRange(0.3f,1.0f),rand_obj.RandfRange(0.2f,1.0f));
         //GD.Print("Fired primary");
+		if(weaponData.isInfinite)
+		{
+			if(weaponData.currentAmmoInMagazine <= 0)
+			{
+				weaponData.currentAmmoInMagazine = weaponData.maxAmmoInMagazine;
+			}
+		}
 		int projectile_index = weaponData.maxAmmoInMagazine - weaponData.currentAmmoInMagazine;
+		
 		projectilePool[projectile_index].spread = weaponData.weaponSpread;
 		projectilePool[projectile_index].LaunchForward(-firePoint.GlobalBasis.Z);
 		currentRecoilDirection = rand_direction;
